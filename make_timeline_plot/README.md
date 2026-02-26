@@ -1,0 +1,1 @@
+This is a python app developed to create Gantt charts. It takes an excel file as input and allows the user to highlight row names and change colors of the bars. The UI was created using CustomTKinter and was packaged using PyInstaller allowing this repository to be downloaded by non-technical users for the use of creating their own Gantt charts.
