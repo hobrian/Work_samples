@@ -1,2 +1,2 @@
 # Work_samples
-Here are some samples of projects/analyses I have previously done
+Here are selected samples of projects/analyses I have previously done
