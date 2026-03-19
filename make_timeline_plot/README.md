@@ -10,13 +10,13 @@ This is a straightforward tool to create Gantt charts for those without experien
 
 - Build and edit Gantt charts through a simple desktop GUI
 - Import an excel file and export a png 
-- No internet connection or account required
+- No Python installation necessary
 - Lightweight and fast
 
 ## Installation & Usage
 
 ### Option 1
-Download repository and double click make_timeline_plot.exe
+Download repository and double click make_timeline_plot.exe (For windows systems)
 
 ### Option 2
 ```bash
