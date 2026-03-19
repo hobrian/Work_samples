@@ -34,4 +34,4 @@ A lightweight desktop application for building publication-quality Gantt charts 
 
 ---
 
-📫 [LinkedIn](https://www.linkedin.com/in/brian-m-ho/) · [Email](brian.ho@ricealumni.net)
+📫 [LinkedIn](https://www.linkedin.com/in/brian-m-ho/) · [Email](mailto:brian.ho@ricealumni.net)
