@@ -24,6 +24,8 @@ Sankey visualizations documenting the stepwise filtering of raw match history da
 - **Patch isolation** — matches restricted to a single game patch to control for balance changes
 - **Missing/incorrect labels** — games where roles weren't properly identified were removed
 - **Aborted games** — remakes and disconnected games excluded
+<img width="600" height="350" alt="newplot" src="https://github.com/user-attachments/assets/945df177-2aa5-46c1-927e-1877ccc69c53" />
+
 
 ---
 
