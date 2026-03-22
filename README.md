@@ -15,6 +15,8 @@ Personal project using the Riot Games API to collect and analyze champion matchu
 
 → [View project](./League_of_Legends_analyses/)
 
+---
+
 ### 🧬 Westbrook Lab — Cancer Transcriptomics Analysis
 `Python` `Jupyter` `RNA-seq` `Data Visualization`
 
