@@ -8,6 +8,13 @@ MD/PhD from Baylor College of Medicine. This repository contains selected work f
 
 ## Projects
 
+### 🎮 League of Legends — Champion Matchup Analysis
+`Python` `Riot API` `EDA` `Machine Learning` `Work in Progress`
+
+Personal project using the Riot Games API to collect and analyze champion matchup data. Currently includes data collection and QC pipelines, with champion performance EDA and ML modeling in progress.
+
+→ [View project](./League_of_Legends_analyses/)
+
 ### 🧬 Westbrook Lab — Cancer Transcriptomics Analysis
 `Python` `Jupyter` `RNA-seq` `Data Visualization`
 
