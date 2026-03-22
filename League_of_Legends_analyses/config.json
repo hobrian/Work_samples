@@ -1,0 +1,17 @@
+{
+    "api_keys": [
+        "your_api_key_here",
+        "your_api_key_here",
+    ],
+    "routing": "americas",
+    "region": "na1",
+    "summoner_df_file": "data/summoner_df_na.tsv",
+    "match_list_file": "data/match_list_na.txt",
+    "summoner_used_file": "data/summoner_used_na.tsv",
+    "match_history_file": "data/match_history_na.tsv",
+    "matches_used_file": "data/matches_used_na.txt",
+    "start_time": 1772697600,
+    "end_time": 1773644400,
+    "queue": 420,
+    "match_count": 30
+}
