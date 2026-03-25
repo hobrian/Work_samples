@@ -8,6 +8,9 @@ import plotly.graph_objects as go
 
 st.title("LoL Patch 26.5 Champion Winrate by Role")
 
+st.write(os.getcwd())
+st.write(os.listdir('.'))
+
 # st.text("The purpose of this project is to identify which champs are advantageous relative to other champs. Although I compiled match histories from 3 regions (EUW, KR, NA)
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
 
