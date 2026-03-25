@@ -323,7 +323,15 @@ with bigtab2:
                         
             else:
                 st.info('Coverage set is full.')
-    
+
+             new_champ = st.selectbox(
+                'Add a champion',
+                options=[nam for nam in role_champs if nam not in [selected_champ]+chosen],
+                key='new_champ'
+            )
+            if st.button('Add', key=f'add_{new_champ}'):
+                st.session_state['chosen_champions'].append(new_champ)
+                st.rerun()  
            
     with right:
         if len(threats) == 0:
