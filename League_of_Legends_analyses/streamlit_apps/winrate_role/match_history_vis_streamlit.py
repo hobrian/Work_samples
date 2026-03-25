@@ -5,13 +5,6 @@ import numpy as np
 
 import plotly.graph_objects as go
 
-
-st.title("LoL Patch 26.5 Champion Winrate by Role")
-
-
-# st.text("The purpose of this project is to identify which champs are advantageous relative to other champs. Although I compiled match histories from 3 regions (EUW, KR, NA)
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
-
 def make_figure(sig_df, error_df):
     fig = go.Figure()
     fig.add_trace(
@@ -70,6 +63,21 @@ def make_figure(sig_df, error_df):
     )
     return fig
 
+st.title("LoL Patch 26.5 Champion Winrate by Role")
+
+texttab1, texttab2 = st.tabs(["Background","Technical Info"])
+with texttab1:
+    st.text("League of Legends is a 5v5 competitive game where two teams battle to destroy each other's base. Each player controls a champion — a unique character with a distinct set of abilities, strengths, and weaknesses. With over 160 champions available, each brings a different playstyle to the game.")
+    st.text("Champions are organized into roles which correspond to positions on the map: top lane, jungle, mid lane, bot lane, and support. Although this is a 5v5 game, the early phase of the game involves facing off directly with their lane opponent in a one on one or two on two setting. A favorable matchup early on can lead to accumulating advantages that help the player contribute to the overall victory.")
+    st.text("Before a match begins, teams take turns selecting their champions in a phase called the draft. The draft proceeds in a snake order, so both you and the opposing team sequentially reveal the selected champions. This creates the concept of a counterpick: choosing a champion whose strengths directly exploit the weaknesses of an opponent's champion. Understanding which champions counter which is therefore a core part of competitive League of Legends strategy.")
+
+with texttab2:
+    st.subheader("Data Source")
+    st.text("Data was collected from Riot Games' public API covering patch 26.5 across the EUW and NA regions, with KR to be incorporated in a future update. Only ranked solo matches from Emerald rank (top ~10% of players) and above are included to ensure the data reflects intentional champion select decisions and consistent gameplay patterns. Matchups with 10 or fewer games are excluded to reduce noise from rarely occurring champion combinations.")
+    st.subheader("Statistics")
+    st.text("Win rates for each champion matchup are estimated using Bayesian shrinkage, where empirical Bayes is used to fit a Beta prior from each champion's overall matchup distribution via method of moments. Individual matchup win rates are smoothed using this prior and flagged as significant if they fall outside the 99% credible interval of the champion's overall posterior Beta distribution. This approach naturally accounts for sample size and sets a champion-specific significance threshold rather than arbitrary effect size thresholds.")
+
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
 with tab1:
     top_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_sig.tsv'),sep='\t')
     top_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_error.tsv'),sep='\t')
