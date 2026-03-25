@@ -173,19 +173,25 @@ with bigtab2:
                 'Support': sup_sig
             }
         
+        selected_role = st.session_state.get('role', 'Top')
+        role_champs = champ_lists[selected_role]
+
         cols = st.columns(5)
         for col, role in zip(cols, roles):
             with col:
+                is_active = role == selected_role
+                border = '2px solid #2951f2' if is_active else '2px solid transparent'
+                bg = '#e8f0fe' if is_active else 'transparent'
                 st.markdown(
-                    f'<div style="text-align: center;"><img src="{role_urls[role]}" width="40"/></div>',
+                    f'''<div style="text-align: center; border: {border}; background-color: {bg}; border-radius: 8px; padding: 4px;">
+                        <img src="{role_urls[role]}" width="40"/>
+                    </div>''',
                     unsafe_allow_html=True
                 )
-                if st.button(role, use_container_width=True):
+                if st.button(role, use_container_width=True, key=f'role_{role}'):
                     st.session_state['role'] = role
-                    st.session_state['chosen_champions'] = []  # reset on role change
-    
-        selected_role = st.session_state.get('role', 'Top')
-        role_champs = champ_lists[selected_role]
+                    st.session_state['chosen_champions'] = [role_champs[0]]
+                    st.rerun()
     
         if st.session_state.get('last_role') != selected_role:
             st.session_state['selected_champ'] = role_champs[0]
