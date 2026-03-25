@@ -81,7 +81,7 @@ def progress_bar(value, height=8, color='#e32020'):
     """
 st.set_page_config(layout="wide")
 
-@st.cache_data
+# @st.cache_data
 def load_full_data():
     return {
         'Top':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_full.tsv'), sep='\t', index_col=0),
