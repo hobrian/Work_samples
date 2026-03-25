@@ -8,8 +8,6 @@ import plotly.graph_objects as go
 
 st.title("LoL Patch 26.5 Champion Winrate by Role")
 
-st.write(os.getcwd())
-st.write(os.listdir('.'))
 
 # st.text("The purpose of this project is to identify which champs are advantageous relative to other champs. Although I compiled match histories from 3 regions (EUW, KR, NA)
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
@@ -72,34 +70,33 @@ def make_figure(sig_df, error_df):
     )
     return fig
 
-
 with tab1:
-    top_sig = pd.read_csv('data/top_sig.tsv',sep='\t')
-    top_error = pd.read_csv('data/top_error.tsv',sep='\t')
+    top_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_sig.tsv'),sep='\t')
+    top_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_error.tsv'),sep='\t')
     top_fig = make_figure(top_sig, top_error)
     
     st.plotly_chart(top_fig)
 with tab2:
-    jg_sig = pd.read_csv('data/jg_sig.tsv',sep='\t')
-    jg_error = pd.read_csv('data/jg_error.tsv',sep='\t')
+    jg_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_sig.tsv'),sep='\t')
+    jg_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_error.tsv'),sep='\t')
     jg_fig = make_figure(jg_sig, jg_error)
     
     st.plotly_chart(jg_fig)
 with tab3:
-    mid_sig = pd.read_csv('data/mid_sig.tsv',sep='\t')
-    mid_error = pd.read_csv('data/mid_error.tsv',sep='\t')
+    mid_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_sig.tsv'),sep='\t')
+    mid_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_error.tsv'),sep='\t')
     mid_fig = make_figure(mid_sig, mid_error)
     
     st.plotly_chart(mid_fig)
 with tab4:
-    bot_sig = pd.read_csv('data/bot_sig.tsv',sep='\t')
-    bot_error = pd.read_csv('data/bot_error.tsv',sep='\t')
+    bot_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_sig.tsv'),sep='\t')
+    bot_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_error.tsv'),sep='\t')
     bot_fig = make_figure(bot_sig, bot_error)
     
     st.plotly_chart(bot_fig)
 with tab5:
-    sup_sig = pd.read_csv('data/sup_sig.tsv',sep='\t')
-    sup_error = pd.read_csv('data/sup_error.tsv',sep='\t')
+    sup_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_sig.tsv'),sep='\t')
+    sup_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_error.tsv'),sep='\t')
     sup_fig = make_figure(sup_sig, sup_error)
     
     st.plotly_chart(sup_fig)
