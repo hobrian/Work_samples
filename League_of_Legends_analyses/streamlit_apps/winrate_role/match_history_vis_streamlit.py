@@ -283,11 +283,11 @@ with bigtab2:
     
     
              # --- chosen champions ---
-            if len(chosen) > 0:
+            if len(chosen) > 1:
                 st.markdown('---')
                 st.markdown('**Your coverage set:**')
                 cols = st.columns(3)
-                for col,champ_nam in zip(cols,chosen):
+                for col,champ_nam in zip(cols,chosen[1:]):
                     with col:
                         st.markdown(
                             f'<img src="{get_icon_url(champ_nam)}" width="35"/>',
