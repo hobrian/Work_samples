@@ -190,7 +190,7 @@ with bigtab2:
         if st.session_state.get('last_role') != selected_role:
             st.session_state['selected_champ'] = role_champs[0]
             st.session_state['last_role'] = selected_role
-            st.session_state['chosen_champions'] = []
+            st.session_state['chosen_champions'] = [role_champs[0]]
     
         # --- champion selectbox ---
         selected_champ = st.selectbox(
@@ -201,12 +201,12 @@ with bigtab2:
     
         # reset chosen if main champ changes
         if st.session_state.get('last_champ') != selected_champ:
-            st.session_state['chosen_champions'] = []
+            st.session_state['chosen_champions'] = [selected_champ]
             st.session_state['last_champ'] = selected_champ
     
         # --- initialize session state ---
         if 'chosen_champions' not in st.session_state:
-            st.session_state['chosen_champions'] = []
+            st.session_state['chosen_champions'] = [selected_champ]
     
         # --- slider ---
         
