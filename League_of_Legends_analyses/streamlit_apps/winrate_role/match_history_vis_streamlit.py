@@ -181,7 +181,7 @@ with bigtab2:
             with col:
                 is_active = role == selected_role
                 border = '2px solid #2951f2' if is_active else '2px solid transparent'
-                bg = '#e8f0fe' if is_active else 'transparent'
+                bg = '#172c43' if is_active else 'transparent'
                 st.markdown(
                     f'''<div style="text-align: center; border: {border}; background-color: {bg}; border-radius: 8px; padding: 4px;">
                         <img src="{role_urls[role]}" width="40"/>
