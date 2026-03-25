@@ -6,6 +6,8 @@ import numpy as np
 import plotly.graph_objects as go
 
 def get_icon_url(champ_name):
+    if champ_name=='Wukong':
+        champ_name='MonkeyKing'
     return f'https://ddragon.leagueoflegends.com/cdn/16.6.1/img/champion/{champ_name}.png'
 
 def make_figure(sig_df, error_df):
@@ -102,7 +104,7 @@ with texttab1:
 
 with texttab2:
     st.subheader("Data Source")
-    st.text("Data was collected from Riot Games' public API covering patch 26.5 across the EUW and NA regions, with KR to be incorporated in a future update. Only ranked solo matches from Emerald rank (top ~10% of players) and above are included to ensure the data reflects intentional champion select decisions and consistent gameplay patterns. Matchups with 10 or fewer games are excluded to reduce noise from rarely occurring champion combinations.")
+    st.text("Data was collected from Riot Games' public API covering patch 26.5 across the EUW and NA regions, with KR to be incorporated in a future update. Only ranked solo matches from Emerald rank (top ~10% of players) and above are included to ensure the data reflects intentional champion select decisions and consistent gameplay patterns. Matchups with 20 or fewer games are excluded to reduce noise from rarely occurring champion combinations.")
     st.subheader("Statistics")
     st.text("Win rates for each champion matchup are estimated using Bayesian shrinkage, where empirical Bayes is used to fit a Beta prior from each champion's overall matchup distribution via method of moments. Individual matchup win rates are smoothed using this prior and flagged as significant if they fall outside the 99% credible interval of the champion's overall posterior Beta distribution. This approach naturally accounts for sample size and sets a champion-specific significance threshold rather than arbitrary effect size thresholds.")
     st.subheader("About")
@@ -330,7 +332,7 @@ with bigtab2:
                 options=[nam for nam in role_champs if nam not in [selected_champ]+chosen],
                 key='new_champ'
             )
-            if st.button('Add', key=f'add_{new_champ}'):
+            if st.button('Add', key=f'add2_{new_champ}'):
                 st.session_state['chosen_champions'].append(new_champ)
                 st.rerun()  
            
