@@ -306,7 +306,7 @@ with bigtab2:
             st.markdown('---')
 
             # --- recommendations ---
-            if len(chosen) < 3:
+            if len(chosen) < 4:
                 st.markdown('**Recommended backups:**')
                 candidates = get_candidates(chosen, selected_champ, full_df)
                 scored = []
@@ -329,18 +329,17 @@ with bigtab2:
                     with col2:
                         st.markdown(f'**{e}**')
                         st.markdown(f'{count}/{len(uncovered)} covered')
-                        
+                
+                new_champ = st.selectbox(
+                    'Add a champion',
+                    options=[nam for nam in role_champs if nam not in [selected_champ]+chosen],
+                    key='new_champ'
+                )
+                if st.button('Add', key=f'add2_{new_champ}'):
+                    st.session_state['chosen_champions'].append(new_champ)
+                    st.rerun()              
             else:
-                st.info('Coverage set is full.')
-
-            new_champ = st.selectbox(
-                'Add a champion',
-                options=[nam for nam in role_champs if nam not in [selected_champ]+chosen],
-                key='new_champ'
-            )
-            if st.button('Add', key=f'add2_{new_champ}'):
-                st.session_state['chosen_champions'].append(new_champ)
-                st.rerun()  
+                st.info('Coverage set is full.') 
            
     with right:
         if len(threats) == 0:
@@ -385,7 +384,7 @@ with bigtab2:
             3. Your champion's significant unfavorable matchups will appear as a grid on the right 
             4. Browse the recommended backup champions ranked by how well they cover your threat set
             5. Select a backup champion to add them to your coverage set. The bars will update to reflect how much of your threat set is now covered
-            6. Continue adding champions until you're satisfied with your coverage, or enter your own champion to see how it performs
+            6. Continue adding champions (up to 3), or enter your own champion to see how it performs
             """
                )
         st.subheader('What are Dominator Sets?')
