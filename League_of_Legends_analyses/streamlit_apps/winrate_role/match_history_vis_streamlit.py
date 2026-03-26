@@ -62,7 +62,7 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
         title_text='Win Rate',
         showgrid=True,
         gridwidth=1,
-        gridcolor='lightgrey',
+        gridcolor='#454545',
         dtick=0.05
     )
     fig.update_yaxes(
@@ -74,7 +74,6 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
     )
     fig.update_layout(
         height=2000*len(error_df)/130,
-        xaxis=dict(showgrid=False),
         yaxis=dict(showgrid=False),
         showlegend=False
     )
