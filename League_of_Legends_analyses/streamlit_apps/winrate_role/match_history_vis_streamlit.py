@@ -147,16 +147,15 @@ for key, val in champ_data.items():
     champ_classes[display_name] = val['tags']
     champ_classes[key] = val['tags']
 
-all_classes = ['Fighter', 'Tank', 'Mage', 'Slayer', 'Marksman', 'Controller', 'Specialist']
+all_classes = ['Fighter', 'Tank', 'Mage', 'Assassin', 'Marksman', 'Support']
 github_raw = 'https://raw.githubusercontent.com/hobrian/Work_samples/main/League_of_Legends_analyses/streamlit_apps/winrate_role/assets'
 class_icon_paths = {
     'Fighter':    f'{github_raw}/Fighter_icon.png',
     'Tank':       f'{github_raw}/Tank_icon.png',
     'Mage':       f'{github_raw}/Mage_icon.png',
-    'Slayer':     f'{github_raw}/Slayer_icon.png',
+    'Assassin':   f'{github_raw}/Slayer_icon.png',
     'Marksman':   f'{github_raw}/Marksman_icon.png',
-    'Controller': f'{github_raw}/Controller_icon.png',
-    'Specialist': f'{github_raw}/Specialist_icon.png'
+    'Support':    f'{github_raw}/Controller_icon.png',
 }
 
 st.title("LoL Patch 26.5 Champion Win Rate by Role")
