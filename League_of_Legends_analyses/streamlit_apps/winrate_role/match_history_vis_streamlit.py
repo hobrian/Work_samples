@@ -348,7 +348,7 @@ with bigtab2:
             (full_df['champ'] == selected_champ) &
             (full_df['delta'] == -1)
         ].copy()
-        threat_opps = threats.loc[:,'opp'].tolist()
+        threat_opps = threats.iloc[:,-1].tolist()
     
         # --- coverage helpers ---
         def get_wr(champ, opp):
