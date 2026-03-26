@@ -59,7 +59,12 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
         )
     )
     fig.update_xaxes(
-        title_text='Win Rate'
+        title_text='Win Rate',
+        showgrid=True,
+        gridwidth=1,
+        gridcolor='lightgrey',
+        dtick=0.05
+    )
     )
     fig.update_yaxes(
         tickvals=list(range(len(error_df))),  
