@@ -83,7 +83,7 @@ def progress_bar(value, height=8, color='#e32020'):
     """
 st.set_page_config(layout="wide")
 
-# @st.cache_data
+@st.cache_data
 def load_full_data():
     return {
         'Top':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_full.tsv'), sep='\t', index_col=0),
@@ -341,40 +341,40 @@ with bigtab2:
             else:
                 st.info('Coverage set is full.') 
            
-    with right:
-        if len(threats) == 0:
-            st.info(f'{selected_champ} has no significant unfavorable matchups.')
-        else:
-            cols_per_row = 5
-            rows = [threats.iloc[i:i+cols_per_row] 
-                    for i in range(0, len(threats), cols_per_row)]
-
-            for row_df in rows:
-                cols = st.columns(cols_per_row)
-                for col, (_, row) in zip(cols, row_df.iterrows()):
-                    opp = row['opp']
-                    cov = coverage[opp]
-                    is_covered = cov['best_wr'] > threshold
-                    display_wr = np.maximum(cov['best_wr'], row['wr_corrected'])
-
-                    with col:
-                        # threat icon
-                        st.markdown(
-                            f'<div style="text-align: center;"><img src="{get_icon_url(opp)}" width="50"/></div>',
-                            unsafe_allow_html=True
-                        )
-                        # bar — green if covered, red if not
-                        bar_color = '#2951f2' if is_covered else '#e32020'
-                        st.markdown(
-                            progress_bar(display_wr, color=bar_color),
-                            unsafe_allow_html=True
-                        )
-                        # covering champion icon
-                        if is_covered and cov['best_champ']:
+        with right:
+            if len(threats) == 0:
+                st.info(f'{selected_champ} has no significant unfavorable matchups.')
+            else:
+                cols_per_row = 5
+                rows = [threats.iloc[i:i+cols_per_row] 
+                        for i in range(0, len(threats), cols_per_row)]
+    
+                for row_df in rows:
+                    cols = st.columns(cols_per_row)
+                    for col, (_, row) in zip(cols, row_df.iterrows()):
+                        opp = row['opp']
+                        cov = coverage[opp]
+                        is_covered = cov['best_wr'] > threshold
+                        display_wr = np.maximum(cov['best_wr'], row['wr_corrected'])
+    
+                        with col:
+                            # threat icon
                             st.markdown(
-                                f'<div style="text-align: center;"><img src="{get_icon_url(cov["best_champ"])}" width="25"/></div>',
+                                f'<div style="text-align: center;"><img src="{get_icon_url(opp)}" width="50"/></div>',
                                 unsafe_allow_html=True
                             )
+                            # bar — green if covered, red if not
+                            bar_color = '#2951f2' if is_covered else '#e32020'
+                            st.markdown(
+                                progress_bar(display_wr, color=bar_color),
+                                unsafe_allow_html=True
+                            )
+                            # covering champion icon
+                            if is_covered and cov['best_champ']:
+                                st.markdown(
+                                    f'<div style="text-align: center;"><img src="{get_icon_url(cov["best_champ"])}" width="25"/></div>',
+                                    unsafe_allow_html=True
+                                )
 
     with domtab2:
         st.subheader('How to Use This Tool')
