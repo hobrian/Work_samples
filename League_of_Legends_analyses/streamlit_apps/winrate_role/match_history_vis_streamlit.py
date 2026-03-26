@@ -10,14 +10,22 @@ def get_icon_url(champ_name):
         champ_name='MonkeyKing'
     return f'https://ddragon.leagueoflegends.com/cdn/16.6.1/img/champion/{champ_name}.png'
 
-def make_figure(sig_df, error_df):
+def make_figure(sig_df, error_df,sort='Win Rate'):
     fig = go.Figure()
+    if sort=='Win Rate':
+        y1 = sig_df.loc[:,'y']
+        y2 = error_df.loc[:,'y']
+        yax_label = error_df.loc[:,'champ']
+    elif sort == 'Alphabetical':
+        y_dict = {y:x for x,y in enumerate(error_df.sort_values('champ',ascending=False).champ)}
+        y1 = [y_dict[i] for i in sig_df.champ]
+        y2 = [y_dict[i] for i in error_df.champ]
+        yax_label = error_df.sort_values('champ',ascending=False).champ
     fig.add_trace(
         go.Scatter(
             x=sig_df.loc[:,'x'],
-            y=sig_df.loc[:,'y'], 
+            y=y1, 
             mode='markers',
-            # text = sig_df.loc[:,'txt'],
             marker=dict(
                 color='blue',
                 symbol='diamond'
@@ -28,7 +36,7 @@ def make_figure(sig_df, error_df):
     fig.add_trace(
         go.Scatter(
             x=error_df.loc[:,'x'],
-            y=error_df.loc[:,'y'], 
+            y=y2, 
             mode='markers',
             error_x=dict(
                 type='data',
@@ -55,7 +63,7 @@ def make_figure(sig_df, error_df):
     )
     fig.update_yaxes(
         tickvals=list(range(len(error_df))),  
-        ticktext=error_df.loc[:,'champ'],                    
+        ticktext=yax_label,                    
         tickfont=dict(size=12),
         zeroline=False,
         range=[-0.5, len(error_df) - 0.5]
@@ -112,35 +120,40 @@ with texttab2:
 bigtab1, bigtab2 = st.tabs(['Win rate Graphs', 'Champion Pool Recommendation'])
 
 with bigtab1:  
+    sort_method = st.radio(
+        'Sort by',
+        options=['Win Rate', 'Alphabetical'],
+        horizontal=True
+    )
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
     with tab1:
         top_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_sig.tsv'),sep='\t')
         top_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_error.tsv'),sep='\t')
-        top_fig = make_figure(top_sig, top_error)
+        top_fig = make_figure(top_sig, top_error, sort = sort_method)
         
         st.plotly_chart(top_fig)
     with tab2:
         jg_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_sig.tsv'),sep='\t')
         jg_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_error.tsv'),sep='\t')
-        jg_fig = make_figure(jg_sig, jg_error)
+        jg_fig = make_figure(jg_sig, jg_error, sort = sort_method)
         
         st.plotly_chart(jg_fig)
     with tab3:
         mid_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_sig.tsv'),sep='\t')
         mid_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_error.tsv'),sep='\t')
-        mid_fig = make_figure(mid_sig, mid_error)
+        mid_fig = make_figure(mid_sig, mid_error, sort = sort_method)
         
         st.plotly_chart(mid_fig)
     with tab4:
         bot_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_sig.tsv'),sep='\t')
         bot_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_error.tsv'),sep='\t')
-        bot_fig = make_figure(bot_sig, bot_error)
+        bot_fig = make_figure(bot_sig, bot_error, sort = sort_method)
         
         st.plotly_chart(bot_fig)
     with tab5:
         sup_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_sig.tsv'),sep='\t')
         sup_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_error.tsv'),sep='\t')
-        sup_fig = make_figure(sup_sig, sup_error)
+        sup_fig = make_figure(sup_sig, sup_error, sort = sort_method)
         
         st.plotly_chart(sup_fig)
 
