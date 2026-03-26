@@ -65,7 +65,6 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
         gridcolor='lightgrey',
         dtick=0.05
     )
-    )
     fig.update_yaxes(
         tickvals=list(range(len(error_df))),  
         ticktext=yax_label,                    
