@@ -128,7 +128,8 @@ with texttab2:
     st.text("Win rates for each champion matchup are estimated using Bayesian shrinkage, where empirical Bayes is used to fit a Beta prior from each champion's overall matchup distribution via method of moments. Individual matchup win rates are smoothed using this prior and flagged as significant if they fall outside the 99% credible interval of the champion's overall posterior Beta distribution. This approach naturally accounts for sample size and sets a champion-specific significance threshold rather than arbitrary effect size thresholds.")
     st.subheader("About")
     st.markdown("To view more of my LoL-related analyses, check out my github! [GitHub](https://github.com/hobrian/Work_samples/tree/main/League_of_Legends_analyses)")
-bigtab1, bigtab2 = st.tabs(['Win rate Graphs', 'Champion Pool Recommendation'])
+
+bigtab1, bigtab2 = st.tabs(['Win Rate Graphs', 'Champion Pool Recommendation'])
 
 with bigtab1:  
     sort_method = st.radio(
