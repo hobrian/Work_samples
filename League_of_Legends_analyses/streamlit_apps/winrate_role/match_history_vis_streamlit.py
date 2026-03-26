@@ -38,7 +38,7 @@ def class_filter_ui(tab_key):
                 unsafe_allow_html=True
             )
             checked = st.checkbox(cls, value=True, key=f'{tab_key}_{cls}', label_visibility='collapsed')
-            st.markdown(f'<div style="text-align: center; font-size: 10px;">{cls}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="text-align: center; font-size: 16px;">{cls}</div>', unsafe_allow_html=True)
             if checked:
                 selected.append(cls)
     return selected if selected else all_classes
