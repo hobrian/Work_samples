@@ -76,7 +76,7 @@ def progress_bar(value, height=8, color='#e32020'):
         for t in ticks
     ])
     return f"""
-    <div style="position: relative; background-color: #d6d6d6; border-radius: 4px; height: {height}px; width: 100%; margin-bottom: 2px; overflow: hidden;">
+    <div title="Win Rate: {value:.3f}" style="position: relative; background-color: #d6d6d6; border-radius: 4px; height: {height}px; width: 100%; margin-bottom: 2px; overflow: hidden;">
         <div style="position: absolute; top: 0; left: 0; background-color: {color}; width: {pct:.1f}%; height: 100%;"></div>
         {tick_marks}
     </div>
@@ -217,7 +217,7 @@ with bigtab2:
         # --- slider ---
         
         threshold = st.slider(
-            'Coverage threshold',
+            'Win rate threshold',
             min_value=0.50,
             max_value=0.55,
             value=0.52,
