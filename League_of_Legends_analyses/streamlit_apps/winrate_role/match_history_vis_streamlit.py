@@ -348,7 +348,7 @@ with bigtab2:
             (full_df['champ'] == selected_champ) &
             (full_df['delta'] == -1)
         ].copy()
-        threat_opps = threats.iloc[:,-1].tolist()
+        threat_opps = threats.iloc[:,'opp'].tolist()
     
         # --- coverage helpers ---
         def get_wr(champ, opp):
@@ -466,7 +466,7 @@ with bigtab2:
                 for row_df in rows:
                     cols = st.columns(cols_per_row)
                     for col, (_, row) in zip(cols, row_df.iterrows()):
-                        opp = row[-1]
+                        opp = row['row']
                         cov = coverage[opp]
                         is_covered = cov['best_wr'] > threshold
                         display_wr = np.maximum(cov['best_wr'], row['wr_corrected'])
