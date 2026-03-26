@@ -280,20 +280,12 @@ with bigtab2:
         }
 
         champ_lists = {
-            'Top': top_error['champ'].sort_values().tolist(), 
-            'Jungle': jg_error['champ'].sort_values().tolist(), 
-            'Mid': mid_error['champ'].sort_values().tolist(), 
-            'Bot': bot_error['champ'].sort_values().tolist(), 
-            'Support': sup_error['champ'].sort_values().tolist()
+            'Top': role_error['Top']['champ'].sort_values().tolist(), 
+            'Jungle': role_error['Jungle']['champ'].sort_values().tolist(), 
+            'Mid': role_error['Mid']['champ'].sort_values().tolist(), 
+            'Bot': role_error['Bot']['champ'].sort_values().tolist(), 
+            'Support': role_error['Support']['champ'].sort_values().tolist()
         }
-
-        role_sig = {
-                'Top':     top_sig,
-                'Jungle':  jg_sig,
-                'Mid':     mid_sig,
-                'Bot':     bot_sig,
-                'Support': sup_sig
-            }
         
         selected_role = st.session_state.get('role', 'Top')
         role_champs = champ_lists[selected_role]
