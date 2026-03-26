@@ -395,6 +395,6 @@ with bigtab2:
                )
         st.subheader('Recommendation Methodology')
         st.text("""
-At each step the tool recommends the backup champion that adds the most marginal coverage to your remaining uncovered threats. Coverage is weighted by win rate margin — a champion that beats your threats convincingly contributes more than one that barely edges them out. Once a threat is covered by a champion in your set, additional champions covering the same threat contribute diminishing returns.
-While the tool will recommend a set of champs that increases the marginal coverage as much as possible, League of Legends is a game and is meant to be fun! Everyone should play the champs that they enjoy, so you are able to select your own champs to add to the "dominator set" and see how they improve the coverage of your threat set. 
+At each step the tool recommends the backup champion that adds the most coverage to your remaining uncovered threats. Coverage is determined by having a greater win rate than the user-selected threshold. Once a threat is covered by a champion in your set, the algorithm continues to suggest the next champ that will cover the most remaining uncovered threats.
+While the tool will recommend a set of champs that increases the coverage as much as possible, League of Legends is a game and is meant to be fun! Everyone should play the champs that they enjoy, so you are able to select your own champs to add to the "dominator set" and see how they may improve the coverage of your threat set. 
 """)
