@@ -94,7 +94,7 @@ def load_full_data():
     }
 
 role_full = load_full_data()
-st.title("LoL Patch 26.5 Champion Winrate by Role")
+st.title("LoL Patch 26.5 Champion Win rate by Role")
 
 texttab1, texttab2 = st.tabs(["Background","Technical Info"])
 with texttab1:
