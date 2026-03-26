@@ -22,7 +22,7 @@ def make_figure(sig_df, error_df):
                 color='blue',
                 symbol='diamond'
             ),
-            customdata=list(zip(sig_df.loc[:,'opp'], sig_df.loc[:,'champ'], sig_df.loc[:,'opp'])),
+            customdata=list(zip(sig_df.loc[:,'opp'], sig_df.loc[:,'champ'], sig_df.loc[:,'opp'], sig_df.loc[:,'total'])),
             hovertemplate='%{customdata[1]} vs %{customdata[2]}<br>WR: %{x:.3f}<br>Games: %{customdata[3]}<extra></extra>' 
         ))
     fig.add_trace(
