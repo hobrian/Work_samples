@@ -123,7 +123,7 @@ with texttab1:
 
 with texttab2:
     st.subheader("Data Source")
-    st.text("Data was collected from Riot Games' public API covering patch 26.5 across the EUW and NA regions, with KR to be incorporated in a future update. Only ranked solo matches from Emerald rank (top ~10% of players) and above are included to ensure the data reflects intentional champion select decisions and consistent gameplay patterns. Matchups with 20 or fewer games are excluded to reduce noise from rarely occurring champion combinations.")
+    st.text("850k+ games were collected from Riot Games' public API covering patch 26.5 across the EUW, KR, and NA regions. Only ranked solo matches from Emerald rank (top ~10% of players) and above are included to ensure the data reflects intentional champion select decisions and consistent gameplay patterns. Matchups with 20 or fewer games are excluded to reduce noise from rarely occurring champion combinations.")
     st.subheader("Statistics")
     st.text("Win rates for each champion matchup are estimated using Bayesian shrinkage, where empirical Bayes is used to fit a Beta prior from each champion's overall matchup distribution via method of moments. Individual matchup win rates are smoothed using this prior and flagged as significant if they fall outside the 99% credible interval of the champion's overall posterior Beta distribution. This approach naturally accounts for sample size and sets a champion-specific significance threshold rather than arbitrary effect size thresholds.")
     st.subheader("About")
