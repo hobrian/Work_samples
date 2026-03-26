@@ -466,7 +466,7 @@ with bigtab2:
                 for row_df in rows:
                     cols = st.columns(cols_per_row)
                     for col, (_, row) in zip(cols, row_df.iterrows()):
-                        opp = row['opp']
+                        opp = row[-1]
                         cov = coverage[opp]
                         is_covered = cov['best_wr'] > threshold
                         display_wr = np.maximum(cov['best_wr'], row['wr_corrected'])
