@@ -157,15 +157,17 @@ def load_error_data():
         'Support': pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_error.tsv'),sep='\t')
     }
 
+@st.cache_data  
+def get_champ_info():
+    return requests.get(
+        f'https://ddragon.leagueoflegends.com/cdn/16.6.1/data/en_US/champion.json'
+    ).json()['data']
 
 role_full = load_full_data()
 role_sig = load_sig_data()
 role_error = load_error_data()
 
-@st.cache_data  
-champ_data = requests.get(
-    f'https://ddragon.leagueoflegends.com/cdn/16.6.1/data/en_US/champion.json'
-).json()['data']
+champ_data = get_champ_info()
 champ_classes = {}
 for key, val in champ_data.items():
     display_name = val['name']
