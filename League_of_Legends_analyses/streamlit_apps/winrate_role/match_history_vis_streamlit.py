@@ -127,14 +127,14 @@ def progress_bar(value, height=8, color='#e32020'):
     """
 st.set_page_config(layout="wide")
 
-# @st.cache_data
+@st.cache_data
 def load_full_data():
     return {
-        'Top':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_full.tsv'), sep='\t', index_col=0),
-        'Jungle':  pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_full.tsv'), sep='\t', index_col=0),
-        'Mid':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_full.tsv'), sep='\t', index_col=0),
-        'Bot':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_full.tsv'), sep='\t', index_col=0),
-        'Support': pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_full.tsv'), sep='\t', index_col=0)
+        'Top':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_full.tsv'), sep='\t'),
+        'Jungle':  pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_full.tsv'), sep='\t'),
+        'Mid':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_full.tsv'), sep='\t'),
+        'Bot':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_full.tsv'), sep='\t'),
+        'Support': pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_full.tsv'), sep='\t')
     }
 
 @st.cache_data
@@ -353,8 +353,9 @@ with bigtab2:
         # --- coverage helpers ---
         def get_wr(champ, opp):
             key = f'{champ}_{opp}'
-            if key in full_df.index:
-                return full_df.loc[key, 'wr_corrected']
+            match = full_df[full_df.iloc[:, 0] == key]
+            if len(match) > 0:
+                return match.iloc[0]['wr_corrected']
             return 0
     
         def get_coverage(chosen, threats):
