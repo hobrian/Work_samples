@@ -148,7 +148,7 @@ for key, val in champ_data.items():
     champ_classes[key] = val['tags']
 
 all_classes = ['Fighter', 'Tank', 'Mage', 'Slayer', 'Marksman', 'Controller', 'Specialist']
-github_raw = 'https://raw.githubusercontent.com/hobrian/Work_samples/tree/main/League_of_Legends_analyses/streamlit_apps/winrate_role/assets'
+github_raw = 'https://raw.githubusercontent.com/hobrian/Work_samples/main/League_of_Legends_analyses/streamlit_apps/winrate_role/assets'
 class_icon_paths = {
     'Fighter':    f'{github_raw}/Fighter_icon.png',
     'Tank':       f'{github_raw}/Tank_icon.png',
