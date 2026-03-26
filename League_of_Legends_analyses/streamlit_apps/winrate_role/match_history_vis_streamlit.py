@@ -150,13 +150,13 @@ for key, val in champ_data.items():
 all_classes = ['Fighter', 'Tank', 'Mage', 'Slayer', 'Marksman', 'Controller', 'Specialist']
 github_raw = 'https://raw.githubusercontent.com/hobrian/Work_samples/tree/main/League_of_Legends_analyses/streamlit_apps/winrate_role/assets'
 class_icon_paths = {
-    'Fighter':    f'{github_raw}/icons/classes/Fighter_icon.png',
-    'Tank':       f'{github_raw}/icons/classes/Tank_icon.png',
-    'Mage':       f'{github_raw}/icons/classes/Mage_icon.png',
-    'Slayer':     f'{github_raw}/icons/classes/Slayer_icon.png',
-    'Marksman':   f'{github_raw}/icons/classes/Marksman_icon.png',
-    'Controller': f'{github_raw}/icons/classes/Controller_icon.png',
-    'Specialist': f'{github_raw}/icons/classes/Specialist_icon.png'
+    'Fighter':    f'{github_raw}/Fighter_icon.png',
+    'Tank':       f'{github_raw}/Tank_icon.png',
+    'Mage':       f'{github_raw}/Mage_icon.png',
+    'Slayer':     f'{github_raw}/Slayer_icon.png',
+    'Marksman':   f'{github_raw}/Marksman_icon.png',
+    'Controller': f'{github_raw}/Controller_icon.png',
+    'Specialist': f'{github_raw}/Specialist_icon.png'
 }
 
 st.title("LoL Patch 26.5 Champion Win Rate by Role")
