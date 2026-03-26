@@ -9,6 +9,38 @@ def get_icon_url(champ_name):
     if champ_name=='Wukong':
         champ_name='MonkeyKing'
     return f'https://ddragon.leagueoflegends.com/cdn/16.6.1/img/champion/{champ_name}.png'
+def filter_by_class(error_df, sig_df, selected_classes):
+    """Filter error_df and sig_df to only include champions in selected classes."""
+    def champ_in_classes(champ):
+        tags = champ_classes.get(champ, [])
+        return any(t in selected_classes for t in tags)
+    
+    filtered_error = error_df[error_df['champ'].apply(champ_in_classes)].reset_index(drop=True)
+    filtered_error['y'] = range(len(filtered_error))  # reindex y positions
+    
+    # remap sig_df y positions to match filtered error_df
+    y_map = {champ: i for i, champ in enumerate(filtered_error['champ'])}
+    filtered_sig = sig_df[sig_df['champ'].apply(champ_in_classes)].copy()
+    filtered_sig['y'] = filtered_sig['champ'].map(y_map)
+    
+    return filtered_error, filtered_sig
+
+def class_filter_ui(tab_key):
+    """Render horizontal class filter checkboxes, returns list of selected classes."""
+    st.markdown('**Filter by class:**')
+    cols = st.columns(len(all_classes))
+    selected = []
+    for col, cls in zip(cols, all_classes):
+        with col:
+            st.markdown(
+                f'<div style="text-align: center;"><img src="{class_icon_paths[cls]}" width="30"/></div>',
+                unsafe_allow_html=True
+            )
+            checked = st.checkbox(cls, value=True, key=f'{tab_key}_{cls}', label_visibility='collapsed')
+            st.markdown(f'<div style="text-align: center; font-size: 10px;">{cls}</div>', unsafe_allow_html=True)
+            if checked:
+                selected.append(cls)
+    return selected if selected else all_classes
 
 def make_figure(sig_df, error_df,sort='Win Rate'):
     fig = go.Figure()
@@ -73,7 +105,7 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
         range=[-0.5, len(error_df) - 0.5]
     )
     fig.update_layout(
-        height=2000*len(error_df)/130,
+        height=2000*len(error_df)/130+100,
         yaxis=dict(showgrid=False),
         showlegend=False
     )
@@ -105,6 +137,26 @@ def load_full_data():
     }
 
 role_full = load_full_data()
+champ_data = requests.get(
+    f'https://ddragon.leagueoflegends.com/cdn/16.6.1/data/en_US/champion.json'
+).json()['data']
+champ_classes = {}
+for key, val in champ_data.items():
+    display_name = val['name']
+    champ_classes[display_name] = val['tags']
+    champ_classes[key] = val['tags']
+
+all_classes = ['Fighter', 'Tank', 'Mage', 'Slayer', 'Marksman', 'Controller', 'Specialist']
+class_icon_paths = {
+    'Fighter':    os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Fighter_icon.png'),
+    'Tank':       os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Fighter_icon.png'),
+    'Mage':       os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Fighter_icon.png'),
+    'Slayer':   os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Fighter_icon.png'),
+    'Marksman':   os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Fighter_icon.png'),
+    'Controller':    os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Fighter_icon.png'),
+    'Specialist': os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Fighter_icon.png'),
+}
+
 st.title("LoL Patch 26.5 Champion Win Rate by Role")
 
 texttab0, texttab1, texttab2 = st.tabs(["Description","Background","Technical Info"])
@@ -144,33 +196,57 @@ with bigtab1:
     with tab1:
         top_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_sig.tsv'),sep='\t')
         top_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_error.tsv'),sep='\t')
-        top_fig = make_figure(top_sig, top_error, sort = sort_method)
-        
-        st.plotly_chart(top_fig)
+        selected_classes = class_filter_ui('top')
+        filtered_error, filtered_sig = filter_by_class(top_error, top_sig, selected_classes)
+        if len(filtered_error) == 0:
+            st.info('No champions match the selected classes.')
+        else:
+            top_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
+            st.plotly_chart(top_fig)
     with tab2:
         jg_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_sig.tsv'),sep='\t')
         jg_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_error.tsv'),sep='\t')
-        jg_fig = make_figure(jg_sig, jg_error, sort = sort_method)
+        selected_classes = class_filter_ui('jg')
+        filtered_error, filtered_sig = filter_by_class(jg_error, jg_sig, selected_classes)
         
-        st.plotly_chart(jg_fig)
+        if len(filtered_error) == 0:
+            st.info('No champions match the selected classes.')
+        else:
+            jg_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
+            st.plotly_chart(jg_fig)
     with tab3:
         mid_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_sig.tsv'),sep='\t')
         mid_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_error.tsv'),sep='\t')
-        mid_fig = make_figure(mid_sig, mid_error, sort = sort_method)
+        selected_classes = class_filter_ui('mid')
+        filtered_error, filtered_sig = filter_by_class(mid_error, mid_sig, selected_classes)
         
-        st.plotly_chart(mid_fig)
+        if len(filtered_error) == 0:
+            st.info('No champions match the selected classes.')
+        else:
+            mid_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
+            st.plotly_chart(mid_fig)
     with tab4:
         bot_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_sig.tsv'),sep='\t')
         bot_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_error.tsv'),sep='\t')
-        bot_fig = make_figure(bot_sig, bot_error, sort = sort_method)
+        selected_classes = class_filter_ui('bot')
+        filtered_error, filtered_sig = filter_by_class(bot_error, bot_sig, selected_classes)
         
-        st.plotly_chart(bot_fig)
+        if len(filtered_error) == 0:
+            st.info('No champions match the selected classes.')
+        else:
+            bot_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
+            st.plotly_chart(bot_fig)
     with tab5:
         sup_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_sig.tsv'),sep='\t')
         sup_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_error.tsv'),sep='\t')
-        sup_fig = make_figure(sup_sig, sup_error, sort = sort_method)
+        selected_classes = class_filter_ui('sup')
+        filtered_error, filtered_sig = filter_by_class(sup_error, sup_sig, selected_classes)
         
-        st.plotly_chart(sup_fig)
+        if len(filtered_error) == 0:
+            st.info('No champions match the selected classes.')
+        else:
+            sup_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
+            st.plotly_chart(sup_fig)
 
 with bigtab2:
     domtab1, domtab2 = st.tabs(['Tool','Instructions'])
