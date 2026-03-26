@@ -148,14 +148,15 @@ for key, val in champ_data.items():
     champ_classes[key] = val['tags']
 
 all_classes = ['Fighter', 'Tank', 'Mage', 'Slayer', 'Marksman', 'Controller', 'Specialist']
+github_raw = 'https://raw.githubusercontent.com/hobrian/Work_samples/tree/main/League_of_Legends_analyses/streamlit_apps/winrate_role/assets'
 class_icon_paths = {
-    'Fighter':    os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Fighter_icon.png'),
-    'Tank':       os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Tank_icon.png'),
-    'Mage':       os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Mage_icon.png'),
-    'Slayer':   os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Slayer_icon.png'),
-    'Marksman':   os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Marksman_icon.png'),
-    'Controller':    os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Controller_icon.png'),
-    'Specialist': os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','assets','Specialist_icon.png')
+    'Fighter':    f'{github_raw}/icons/classes/Fighter_icon.png',
+    'Tank':       f'{github_raw}/icons/classes/Tank_icon.png',
+    'Mage':       f'{github_raw}/icons/classes/Mage_icon.png',
+    'Slayer':     f'{github_raw}/icons/classes/Slayer_icon.png',
+    'Marksman':   f'{github_raw}/icons/classes/Marksman_icon.png',
+    'Controller': f'{github_raw}/icons/classes/Controller_icon.png',
+    'Specialist': f'{github_raw}/icons/classes/Specialist_icon.png'
 }
 
 st.title("LoL Patch 26.5 Champion Win Rate by Role")
