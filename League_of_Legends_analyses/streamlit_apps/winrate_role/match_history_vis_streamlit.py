@@ -88,7 +88,7 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
         x=0.5,
         line=dict(
             color='green',
-            width=1
+            width=1.5
         )
     )
     fig.update_xaxes(
