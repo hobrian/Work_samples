@@ -137,7 +137,30 @@ def load_full_data():
         'Support': pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_full.tsv'), sep='\t', index_col=0)
     }
 
+@st.cache_data
+def load_sig_data():
+    return {
+        'Top':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_sig.tsv'),sep='\t'),
+        'Jungle':  pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_sig.tsv'),sep='\t'),
+        'Mid':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_sig.tsv'),sep='\t'),
+        'Bot':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_sig.tsv'),sep='\t'),
+        'Support': pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_sig.tsv'),sep='\t')
+    }
+
+@st.cache_data
+def load_error_data():
+    return {
+        'Top':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_error.tsv'),sep='\t'),
+        'Jungle':  pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_error.tsv'),sep='\t'),
+        'Mid':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_error.tsv'),sep='\t'),
+        'Bot':     pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_error.tsv'),sep='\t'),
+        'Support': pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_error.tsv'),sep='\t')
+    }
+
+
 role_full = load_full_data()
+role_sig = load_sig_data()
+role_error = load_error_data()
 
 @st.cache_data  
 champ_data = requests.get(
@@ -197,20 +220,16 @@ with bigtab1:
     )
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
     with tab1:
-        top_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_sig.tsv'),sep='\t')
-        top_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','top_error.tsv'),sep='\t')
         selected_classes = class_filter_ui('top')
-        filtered_error, filtered_sig = filter_by_class(top_error, top_sig, selected_classes)
+        filtered_error, filtered_sig = filter_by_class(role_error['Top'], role_sig['Top'], selected_classes)
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
         else:
             top_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
             st.plotly_chart(top_fig)
     with tab2:
-        jg_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_sig.tsv'),sep='\t')
-        jg_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','jg_error.tsv'),sep='\t')
         selected_classes = class_filter_ui('jg')
-        filtered_error, filtered_sig = filter_by_class(jg_error, jg_sig, selected_classes)
+        filtered_error, filtered_sig = filter_by_class(role_error['Jungle'], role_sig['Jungle'], selected_classes)
         
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
@@ -218,10 +237,8 @@ with bigtab1:
             jg_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
             st.plotly_chart(jg_fig)
     with tab3:
-        mid_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_sig.tsv'),sep='\t')
-        mid_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','mid_error.tsv'),sep='\t')
         selected_classes = class_filter_ui('mid')
-        filtered_error, filtered_sig = filter_by_class(mid_error, mid_sig, selected_classes)
+        filtered_error, filtered_sig = filter_by_class(role_error['Mid'], role_sig['Mid'], selected_classes)
         
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
@@ -229,10 +246,8 @@ with bigtab1:
             mid_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
             st.plotly_chart(mid_fig)
     with tab4:
-        bot_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_sig.tsv'),sep='\t')
-        bot_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','bot_error.tsv'),sep='\t')
         selected_classes = class_filter_ui('bot')
-        filtered_error, filtered_sig = filter_by_class(bot_error, bot_sig, selected_classes)
+        filtered_error, filtered_sig = filter_by_class(role_error['Bot'], role_sig['Bot'], selected_classes)
         
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
@@ -240,10 +255,8 @@ with bigtab1:
             bot_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
             st.plotly_chart(bot_fig)
     with tab5:
-        sup_sig = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_sig.tsv'),sep='\t')
-        sup_error = pd.read_csv(os.path.join(os.getcwd(), 'League_of_Legends_analyses', 'streamlit_apps','winrate_role','data','sup_error.tsv'),sep='\t')
         selected_classes = class_filter_ui('sup')
-        filtered_error, filtered_sig = filter_by_class(sup_error, sup_sig, selected_classes)
+        filtered_error, filtered_sig = filter_by_class(role_error['Support'], role_sig['Support'], selected_classes)
         
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
