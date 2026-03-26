@@ -104,7 +104,18 @@ def load_full_data():
 role_full = load_full_data()
 st.title("LoL Patch 26.5 Champion Win Rate by Role")
 
-texttab1, texttab2 = st.tabs(["Background","Technical Info"])
+texttab0, texttab1, texttab2 = st.tabs(["Description","Background","Technical Info"])
+with texttab0:
+    st.subheader("Win Rate Graphs")
+    st.text("""
+    Have you ever been in champ select and wondered what champ would be a good counterpick? Looking at matchup data alone is not sufficient. Matchup data does not take into account a champion's overall win rate (is this an advantageous matchup or is my champ just strong in general?), and if there is a small sample size, it is hard to determine what is real and what is noise. These graphs used Bayesian statistics to create intervals where there is a 99% chance that the true win rate of the champ lies within that range. The parameters used to create these intervals are also used to adjust win rates of champion matchups, pulling outlier values towards the mean. I define advantageous and disadvantageous matchups as those whose adjusted win rates fall outside of the 99% credible interval since these deviate from the expected win rate. 
+    This tab shows every champion's win rate distribution across all of their matchups in a single view. Each champion is represented by a red dot showing their observed average win rate and a bar showing the 99% interval. The blue diamonds overlaid on each bar represent statistically significant matchups. Advantageous matchups appear on the right, and disadvantageous ones appear on the left. Hover over the diamond to reveal the matchup and see the adjusted win rate and number of games played.
+""")
+    st.subheader("Champion Pool Recommendation")
+    st.text("""
+Most players have a main they're most comfortable on, but it always feels bad when your opponent locks in a counterpick before you pick your champ. Do you decide to go into a losing matchup or do you swap champs? Which champ should you swap to? Most importantly, which champ can cover all the matchups that you struggle with on your main? This tool helps you identify which champions you can add to your pool so you always have a winning matchup.
+Select your main and the tool identifies which opponents pose a real threat based on win rate data. It then recommends backup champions one at a time, prioritizing whoever covers the most of your remaining bad matchups. You can follow the recommendations or plug in your own favorites to see how well they protect you against your counters.
+""")
 with texttab1:
     st.text("League of Legends is a 5v5 competitive game where two teams battle to destroy each other's base. Each player controls a champion — a unique character with a distinct set of abilities, strengths, and weaknesses. With over 160 champions available, each brings a different playstyle to the game.")
     st.text("Champions are organized into roles which correspond to positions on the map: top lane, jungle, mid lane, bot lane, and support. Although this is a 5v5 game, the early phase of the game involves facing off directly with their lane opponent in a one on one or two on two setting. A favorable matchup early on can lead to accumulating advantages that help the player contribute to the overall victory.")
