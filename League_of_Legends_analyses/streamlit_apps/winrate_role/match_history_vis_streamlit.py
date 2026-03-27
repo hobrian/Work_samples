@@ -39,7 +39,7 @@ def class_filter_ui(tab_key):
             )
             checked = st.checkbox(cls, value=True, key=f'{tab_key}_{cls}', label_visibility='collapsed')
             st.markdown(
-                f'<div style="text-align: center; font-size: 10px; margin-top: -10px;">{cls}</div>',
+                f'<div style="text-align: center; font-size: 16px; margin-top: -10px;">{cls}</div>',
                 unsafe_allow_html=True
             )
             if checked:
