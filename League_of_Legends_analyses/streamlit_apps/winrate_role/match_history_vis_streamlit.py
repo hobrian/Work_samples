@@ -229,7 +229,7 @@ with texttab2:
 bigtab1, bigtab2 = st.tabs(['Win Rate Graphs', 'Champion Pool Recommendation'])
 
 with bigtab1:
-    graph_col1, graph_col2 = st.columns()
+    graph_col1, graph_col2 = st.columns(2)
     with graph_col1:
         sort_method = st.radio(
             'Sort by',
