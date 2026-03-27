@@ -299,9 +299,9 @@ with bigtab1:
             paged_error = pagination_ui(filtered_error, page_key)
     
             paged_error = paged_error.copy()
-            paged_error['y'] = range(len(paged_error))
-    
-            y_map = {champ: i for i, champ in enumerate(paged_error['champ'])}
+            paged_error['y'] = range(len(paged_error) - 1, -1, -1)
+            
+            y_map = {row['champ']: row['y'] for _, row in paged_error.iterrows()}
             paged_sig = filtered_sig[filtered_sig['champ'].isin(paged_error['champ'])].copy()
             paged_sig['y'] = paged_sig['champ'].map(y_map)
     
@@ -321,9 +321,9 @@ with bigtab1:
             paged_error = pagination_ui(filtered_error, page_key)
     
             paged_error = paged_error.copy()
-            paged_error['y'] = range(len(paged_error))
-    
-            y_map = {champ: i for i, champ in enumerate(paged_error['champ'])}
+            paged_error['y'] = range(len(paged_error) - 1, -1, -1)
+            
+            y_map = {row['champ']: row['y'] for _, row in paged_error.iterrows()}
             paged_sig = filtered_sig[filtered_sig['champ'].isin(paged_error['champ'])].copy()
             paged_sig['y'] = paged_sig['champ'].map(y_map)
     
@@ -343,9 +343,9 @@ with bigtab1:
             paged_error = pagination_ui(filtered_error, page_key)
     
             paged_error = paged_error.copy()
-            paged_error['y'] = range(len(paged_error))
-    
-            y_map = {champ: i for i, champ in enumerate(paged_error['champ'])}
+            paged_error['y'] = range(len(paged_error) - 1, -1, -1)
+            
+            y_map = {row['champ']: row['y'] for _, row in paged_error.iterrows()}
             paged_sig = filtered_sig[filtered_sig['champ'].isin(paged_error['champ'])].copy()
             paged_sig['y'] = paged_sig['champ'].map(y_map)
     
@@ -365,9 +365,9 @@ with bigtab1:
             paged_error = pagination_ui(filtered_error, page_key)
     
             paged_error = paged_error.copy()
-            paged_error['y'] = range(len(paged_error))
-    
-            y_map = {champ: i for i, champ in enumerate(paged_error['champ'])}
+            paged_error['y'] = range(len(paged_error) - 1, -1, -1)
+            
+            y_map = {row['champ']: row['y'] for _, row in paged_error.iterrows()}
             paged_sig = filtered_sig[filtered_sig['champ'].isin(paged_error['champ'])].copy()
             paged_sig['y'] = paged_sig['champ'].map(y_map)
     
@@ -387,9 +387,9 @@ with bigtab1:
             paged_error = pagination_ui(filtered_error, page_key)
     
             paged_error = paged_error.copy()
-            paged_error['y'] = range(len(paged_error))
-    
-            y_map = {champ: i for i, champ in enumerate(paged_error['champ'])}
+            paged_error['y'] = range(len(paged_error) - 1, -1, -1)
+            
+            y_map = {row['champ']: row['y'] for _, row in paged_error.iterrows()}
             paged_sig = filtered_sig[filtered_sig['champ'].isin(paged_error['champ'])].copy()
             paged_sig['y'] = paged_sig['champ'].map(y_map)
     
