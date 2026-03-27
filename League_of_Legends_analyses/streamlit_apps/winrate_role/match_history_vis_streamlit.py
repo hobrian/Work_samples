@@ -427,7 +427,7 @@ with bigtab2:
                 unsafe_allow_html=True
             )
             st.markdown(
-                '<div style="text-align: left; font-size: 14px; ">Weighted matchup coverage: {weighted_pct*100:.0f}%</div>',
+                f'<div style="text-align: left; font-size: 14px; ">Weighted matchup coverage: {weighted_pct*100:.0f}%</div>',
                 unsafe_allow_html=True
             )
             st.markdown(progress_bar(weighted_pct, color='##26b000'), unsafe_allow_html=True)
