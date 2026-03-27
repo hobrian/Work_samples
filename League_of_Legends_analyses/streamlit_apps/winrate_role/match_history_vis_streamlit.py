@@ -387,21 +387,34 @@ with bigtab2:
             excluded = set(chosen + [selected_champ])
             return [c for c in all_champs if c not in excluded]
     
-        def score_candidate(e, uncovered, full_df, threshold):
-            covered_count = 0
+        def score_candidate(e, uncovered, uncovered_totals, full_df, threshold):
+            covered_weight = 0
             tiebreak = 0
-            for opp in uncovered:
+            for opp, total in zip(uncovered, uncovered_totals):
                 wr = get_wr(e, opp)
                 if wr > threshold:
-                    covered_count += 1
-                    tiebreak += wr - threshold
-            return covered_count, tiebreak
+                    covered_weight += total
+                    tiebreak += (wr - threshold) * total
+            return covered_weight, tiebreak
     
         # --- compute coverage state ---
         chosen = st.session_state['chosen_champions']
         coverage = get_coverage(chosen, threat_opps)
-        uncovered = [opp for opp in threat_opps 
-                     if coverage[opp]['best_wr'] <= threshold]
+        uncovered = []
+        uncovered_totals = []
+        for opp in threat_opps:
+            if coverage[opp]['best_wr'] <= threshold:
+                uncovered.append(opp)
+                uncovered_totals.append(threats.loc[threats['opp'] == opp, 'total'].values[0])
+        
+        total_threat_weight = threats['total'].sum()
+
+        covered_weight = sum(
+            threats.loc[threats['opp'] == opp, 'total'].values[0]
+            for opp in threat_opps
+            if coverage[opp]['best_wr'] > threshold
+        )
+        weighted_pct = covered_weight / total_threat_weight if total_threat_weight > 0 else 0
     
         # --- layout ---
         left, right = st.columns([1, 3])
@@ -412,7 +425,11 @@ with bigtab2:
                 f'<div style="text-align: center;"><img src="{get_icon_url(selected_champ)}" width="80"/></div>',
                 unsafe_allow_html=True
             )
-    
+            st.markdown(
+                '<div style="text-align: center; font-size: 12px; color: grey;">Weighted matchup coverage</div>',
+                unsafe_allow_html=True
+            )
+            st.markdown(progress_bar(weighted_pct, color='#2951f2'), unsafe_allow_html=True)
     
              # --- chosen champions ---
             if len(chosen) > 1:
@@ -437,7 +454,7 @@ with bigtab2:
                 candidates = get_candidates(chosen, selected_champ, full_df)
                 scored = []
                 for e in candidates:
-                    count, tiebreak = score_candidate(e, uncovered, full_df, threshold)
+                    count, tiebreak = score_candidate(e, uncovered, uncovered_totals, full_df, threshold)
                     scored.append((e, count, tiebreak))
                 scored.sort(key=lambda x: (x[1], x[2]), reverse=True)
                 top5 = scored[:5]
