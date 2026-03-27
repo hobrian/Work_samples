@@ -34,11 +34,14 @@ def class_filter_ui(tab_key):
     for col, cls in zip(cols, all_classes):
         with col:
             st.markdown(
-                f'<div style="text-align: center;"><img src="{class_icon_paths[cls]}" width="30"/></div>',
+                f'<div style="text-align: center; margin-bottom: -15px;"><img src="{class_icon_paths[cls]}" width="30"/></div>',
                 unsafe_allow_html=True
             )
             checked = st.checkbox(cls, value=True, key=f'{tab_key}_{cls}', label_visibility='collapsed')
-            st.markdown(f'<div style="text-align: center; font-size: 16px;">{cls}</div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div style="text-align: center; font-size: 10px; margin-top: -10px;">{cls}</div>',
+                unsafe_allow_html=True
+            )
             if checked:
                 selected.append(cls)
     return selected if selected else all_classes
