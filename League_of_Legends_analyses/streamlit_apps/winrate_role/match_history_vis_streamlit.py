@@ -137,7 +137,7 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
         ticktext=yax_label,                    
         tickfont=dict(size=12),
         zeroline=False,
-        range=[-0.5, len(error_df) - 0.5]
+        range=[len(error_df) - 0.5, -0.5]
     )
     fig.update_layout(
         height=2000*len(error_df)/130+100,
