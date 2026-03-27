@@ -52,21 +52,17 @@ def pagination_ui(df, page_key):
     total_pages = int(max(1, np.ceil(total_rows / page_size)))
 
     col0, col1, col2, col3, col4 = st.columns([4, 1, 2, 1, 4])
-
     with col1:
-        if st.button("⬅️", key=f'prev_{page_key}', disabled=(st.session_state[page_key] == 1)):
+        if st.button("⬅️", key=f'prev_{page_key}', disabled=(st.session_state[page_key] == 1), use_container_width=True):
             st.session_state[page_key] -= 1
             st.rerun()
-
     with col2:
-        st.markdown(f"**Page {st.session_state[page_key]} of {total_pages}**")
-
+        st.markdown(f"<div style='text-align: center;'><b>Page {st.session_state[page_key]} of {total_pages}</b></div>", unsafe_allow_html=True)
     with col3:
-        if st.button("➡️", key=f'next_{page_key}', disabled=(st.session_state[page_key] == total_pages)):
+        if st.button("➡️", key=f'next_{page_key}', disabled=(st.session_state[page_key] == total_pages), use_container_width=True):
             st.session_state[page_key] += 1
             st.rerun()
-
-
+            
     start = (st.session_state[page_key] - 1) * page_size
     end = start + page_size
     st.caption(f"Showing {start + 1}–{min(end, total_rows)} of {total_rows} champions")
