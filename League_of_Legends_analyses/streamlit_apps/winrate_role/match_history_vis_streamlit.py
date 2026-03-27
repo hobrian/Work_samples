@@ -228,12 +228,21 @@ with texttab2:
 
 bigtab1, bigtab2 = st.tabs(['Win Rate Graphs', 'Champion Pool Recommendation'])
 
-with bigtab1:  
-    sort_method = st.radio(
-        'Sort by',
-        options=['Win Rate', 'Alphabetical'],
-        horizontal=True
-    )
+with bigtab1:
+    graph_col1, graph_col2 = st.columns()
+    with graph_col1:
+        sort_method = st.radio(
+            'Sort by',
+            options=['Win Rate', 'Alphabetical'],
+            horizontal=True
+        )
+    with graph_col2:
+        res_per_page = st.selectbox(
+            'Results per page:',
+            options=['25','50','All'],
+            key='res_num'
+        )
+        
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
     with tab1:
         selected_classes = class_filter_ui('top')
