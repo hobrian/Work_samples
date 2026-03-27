@@ -125,7 +125,6 @@ def progress_bar(value, height=8, color='#e32020'):
         {tick_marks}
     </div>
     """
-st.set_page_config(layout="wide")
 
 @st.cache_data
 def load_full_data():
@@ -162,6 +161,18 @@ def get_champ_info():
     return requests.get(
         f'https://ddragon.leagueoflegends.com/cdn/16.6.1/data/en_US/champion.json'
     ).json()['data']
+
+st.set_page_config(layout="wide")
+
+st.markdown("""
+    <style>
+    .block-container {
+        max-width: 1200px;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 role_full = load_full_data()
 role_sig = load_sig_data()
