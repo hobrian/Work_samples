@@ -72,7 +72,7 @@ def pagination_ui(df, page_key):
     end = start + page_size
     st.caption(f"Showing {start + 1}–{min(end, total_rows)} of {total_rows} champions")
 
-    return df.iloc[start:end]
+    return df.iloc[::-1].iloc[start:end]
     
 def make_figure(sig_df, error_df,sort='Win Rate'):
     fig = go.Figure()
