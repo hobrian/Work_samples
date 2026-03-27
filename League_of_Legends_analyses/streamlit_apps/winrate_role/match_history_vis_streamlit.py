@@ -539,7 +539,7 @@ with bigtab2:
                 f'<div style="text-align: left; font-size: 14px; ">Weighted matchup coverage: {weighted_pct*100:.0f}%</div>',
                 unsafe_allow_html=True
             )
-            st.markdown(progress_bar(weighted_pct, color='#26b000'), unsafe_allow_html=True, show_tooltip=False)
+            st.markdown(progress_bar(weighted_pct, color='#26b000',  show_tooltip=False), unsafe_allow_html=True)
     
              # --- chosen champions ---
             if len(chosen) > 1:
