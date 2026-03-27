@@ -240,7 +240,8 @@ with bigtab1:
         res_per_page = st.selectbox(
             'Results per page:',
             options=['25','50','All'],
-            key='res_num'
+            key='res_num',
+            use_container_width=False
         )
         
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
