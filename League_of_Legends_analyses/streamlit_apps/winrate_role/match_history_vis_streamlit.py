@@ -229,7 +229,7 @@ with texttab2:
 bigtab1, bigtab2 = st.tabs(['Win Rate Graphs', 'Champion Pool Recommendation'])
 
 with bigtab1:
-    graph_col1, graph_col2 = st.columns(2)
+    graph_col1, _, graph_col2,_ = st.columns(4)
     with graph_col1:
         sort_method = st.radio(
             'Sort by',
@@ -241,7 +241,6 @@ with bigtab1:
             'Results per page:',
             options=['25','50','All'],
             key='res_num',
-            use_container_width=False
         )
         
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
