@@ -18,9 +18,9 @@ def filter_by_class(error_df, sig_df, selected_classes, sort='Win Rate'):
     filtered_error = error_df[error_df['champ'].apply(champ_in_classes)].copy()
     
     if sort == 'Win Rate':
-        filtered_error = filtered_error.sort_values('x', ascending=True)
+        filtered_error = filtered_error.sort_values('x', ascending=False)
     elif sort == 'Alphabetical':
-        filtered_error = filtered_error.sort_values('champ', ascending=False)
+        filtered_error = filtered_error.sort_values('champ', ascending=True)
     
     filtered_error = filtered_error.reset_index(drop=True)
     filtered_error['y'] = range(len(filtered_error))
