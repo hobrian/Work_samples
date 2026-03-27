@@ -461,18 +461,18 @@ with bigtab2:
                 top5 = scored[:5]
     
                 for e, count, _, pct_gain in top5:
-                col1, col2 = st.columns([1, 2])
-                with col1:
-                    st.markdown(
-                        f'<div style="text-align: center;"><img src="{get_icon_url(e)}" width="35"/>',
-                        unsafe_allow_html=True
-                    )
-                    if st.button('Add', key=f'add_{e}'):
-                        st.session_state['chosen_champions'].append(e)
-                        st.rerun()
-                with col2:
-                    st.markdown(f'**{e}**')
-                    st.markdown(f'+{pct_gain*100:.1f}% coverage')
+                    col1, col2 = st.columns([1, 2])
+                    with col1:
+                        st.markdown(
+                            f'<div style="text-align: center;"><img src="{get_icon_url(e)}" width="35"/>',
+                            unsafe_allow_html=True
+                        )
+                        if st.button('Add', key=f'add_{e}'):
+                            st.session_state['chosen_champions'].append(e)
+                            st.rerun()
+                    with col2:
+                        st.markdown(f'**{e}**')
+                        st.markdown(f'+{pct_gain*100:.1f}% coverage')
                 
                 new_champ = st.selectbox(
                     'Add a champion',
