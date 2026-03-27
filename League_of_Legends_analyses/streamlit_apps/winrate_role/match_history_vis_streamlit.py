@@ -287,6 +287,12 @@ with bigtab1:
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
     if "page_top" not in st.session_state:
         st.session_state['page_top'] = 1
+
+    if st.session_state.get('last_res') != res_per_page:
+        for key in ['page_top', 'page_jg', 'page_mid', 'page_bot', 'page_sup']:
+            st.session_state[key] = 1
+        st.session_state['last_res'] = res_per_page
+        
     with tab1:
         selected_classes = class_filter_ui('top')
         filtered_error, filtered_sig = filter_by_class(role_error['Top'], role_sig['Top'], selected_classes)
