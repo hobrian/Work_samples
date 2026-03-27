@@ -46,6 +46,51 @@ def class_filter_ui(tab_key):
                 selected.append(cls)
     return selected if selected else all_classes
 
+def pagination_ui(df):
+    total_rows = len(df)
+    if st.session_state['page_len'] == None:
+        page_size = total_rows
+    else
+        page_size = st.session_state['page_len']
+    total_pages = max(1, math.ceil(total_rows / page_size))
+    col1, col2, col3, col4 = st.columns([1, 2, 2, 2])
+    
+    # Prev button
+    with col1:
+        if st.button("⬅️", disabled=(st.session_state.page == 1)):
+            st.session_state.page -= 1
+    
+    # Page indicator
+    with col2:
+        st.markdown(f"**Page {st.session_state.page} of {total_pages}**")
+    
+    # Next button
+    with col3:
+        if st.button("➡️", disabled=(st.session_state.page == total_pages)):
+            st.session_state.page += 1
+    
+    # Jump to page
+    with col4:
+        jump_page = st.number_input(
+            "Go to",
+            min_value=1,
+            max_value=total_pages,
+            value=st.session_state.page,
+            step=1,
+            label_visibility="collapsed"
+        )
+        if jump_page != st.session_state.page:
+            st.session_state.page = jump_page
+    
+    # --- Slice data ---
+    start = (st.session_state.page - 1) * page_size
+    end = start + page_size
+    
+    # --- Row info ---
+    st.caption(f"Showing rows {start + 1}–{min(end, total_rows)} of {total_rows}")
+
+    return df.iloc[start:end]
+
 def make_figure(sig_df, error_df,sort='Win Rate'):
     fig = go.Figure()
     if sort=='Win Rate':
@@ -242,12 +287,18 @@ with bigtab1:
             options=['25','50','All'],
             key='res_num',
         )
+        st.session_state['page_len'] = None if res_per_page == 'All' else int(res_per_page)
         
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
+    if "page" not in st.session_state:
+        st.session_state.page = 1
     with tab1:
         selected_classes = class_filter_ui('top')
         filtered_error, filtered_sig = filter_by_class(role_error['Top'], role_sig['Top'], selected_classes)
-        if len(filtered_error) == 0:
+        filtered_error = pagination_ui(filtered_error)
+        if res_per_page is not None:
+            filtered_sig = filtered_sig[filtered_sig.champ in filtered_error.champ]        
+        if len(page_filtered_error) == 0:
             st.info('No champions match the selected classes.')
         else:
             top_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
