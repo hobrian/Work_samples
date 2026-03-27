@@ -138,15 +138,16 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
     )
     return fig
 
-def progress_bar(value, height=8, color='#e32020'):
+def progress_bar(value, height=8, color='#e32020', show_tooltip=True):
     pct = value * 100
     ticks = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     tick_marks = ''.join([
         f'<div style="position: absolute; left: {t*100}%; top: 0; height: 100%; width: 1px; background-color: #bbb;"></div>'
         for t in ticks
     ])
+    title = f'title="Win Rate: {value:.3f}"' if show_tooltip else ''
     return f"""
-    <div title="Win Rate: {value:.3f}" style="position: relative; background-color: #d6d6d6; border-radius: 4px; height: {height}px; width: 100%; margin-bottom: 2px; overflow: hidden;">
+    <div {title} style="position: relative; background-color: #d6d6d6; border-radius: 4px; height: {height}px; width: 100%; margin-bottom: 2px; overflow: hidden;">
         <div style="position: absolute; top: 0; left: 0; background-color: {color}; width: {pct:.1f}%; height: 100%;"></div>
         {tick_marks}
     </div>
@@ -538,7 +539,7 @@ with bigtab2:
                 f'<div style="text-align: left; font-size: 14px; ">Weighted matchup coverage: {weighted_pct*100:.0f}%</div>',
                 unsafe_allow_html=True
             )
-            st.markdown(progress_bar(weighted_pct, color='#26b000'), unsafe_allow_html=True)
+            st.markdown(progress_bar(weighted_pct, color='#26b000'), unsafe_allow_html=True, show_tooltip=False)
     
              # --- chosen champions ---
             if len(chosen) > 1:
