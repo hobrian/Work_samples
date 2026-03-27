@@ -57,7 +57,7 @@ def pagination_ui(df, page_key):
             st.session_state[page_key] -= 1
             st.rerun()
     with col2:
-        st.markdown(f"<div style='text-align: center;'><b>Page {st.session_state[page_key]} of {total_pages}</b></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center; line-height: 38px;'><b>Page {st.session_state[page_key]} of {total_pages}</b></div>", unsafe_allow_html=True)
     with col3:
         if st.button("➡️", key=f'next_{page_key}', disabled=(st.session_state[page_key] == total_pages), use_container_width=True):
             st.session_state[page_key] += 1
