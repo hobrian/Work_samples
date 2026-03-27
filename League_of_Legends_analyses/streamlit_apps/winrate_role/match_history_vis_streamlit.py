@@ -133,6 +133,7 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
     )
     fig.update_layout(
         height=2000*len(error_df)/130+100,
+        margin=dict(t=10),
         yaxis=dict(showgrid=False),
         showlegend=False
     )
