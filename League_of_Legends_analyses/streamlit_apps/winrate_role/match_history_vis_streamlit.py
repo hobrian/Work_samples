@@ -46,51 +46,46 @@ def class_filter_ui(tab_key):
                 selected.append(cls)
     return selected if selected else all_classes
 
-def pagination_ui(df):
+def pagination_ui(df, page_key):
     total_rows = len(df)
-    if st.session_state['page_len'] == None:
-        page_size = total_rows
-    else:
-        page_size = st.session_state['page_len']
-    total_pages = max(1, np.ceil(total_rows / page_size))
+    page_size = st.session_state['page_len'] if st.session_state['page_len'] is not None else total_rows
+    total_pages = int(max(1, np.ceil(total_rows / page_size)))
+
     col1, col2, col3, col4 = st.columns([1, 2, 2, 2])
-    
-    # Prev button
+
     with col1:
-        if st.button("⬅️", disabled=(st.session_state.page == 1)):
-            st.session_state.page -= 1
-    
-    # Page indicator
+        if st.button("⬅️", key=f'prev_{page_key}', disabled=(st.session_state[page_key] == 1)):
+            st.session_state[page_key] -= 1
+            st.rerun()
+
     with col2:
-        st.markdown(f"**Page {st.session_state.page} of {total_pages}**")
-    
-    # Next button
+        st.markdown(f"**Page {st.session_state[page_key]} of {total_pages}**")
+
     with col3:
-        if st.button("➡️", disabled=(st.session_state.page == total_pages)):
-            st.session_state.page += 1
-    
-    # Jump to page
+        if st.button("➡️", key=f'next_{page_key}', disabled=(st.session_state[page_key] == total_pages)):
+            st.session_state[page_key] += 1
+            st.rerun()
+
     with col4:
         jump_page = st.number_input(
             "Go to",
             min_value=1,
             max_value=total_pages,
-            value=st.session_state.page,
+            value=st.session_state[page_key],
             step=1,
+            key=f'jump_{page_key}',
             label_visibility="collapsed"
         )
-        if jump_page != st.session_state.page:
-            st.session_state.page = jump_page
-    
-    # --- Slice data ---
-    start = (st.session_state.page - 1) * page_size
+        if jump_page != st.session_state[page_key]:
+            st.session_state[page_key] = jump_page
+            st.rerun()
+
+    start = (st.session_state[page_key] - 1) * page_size
     end = start + page_size
-    
-    # --- Row info ---
-    st.caption(f"Showing rows {start + 1}–{min(end, total_rows)} of {total_rows}")
+    st.caption(f"Showing {start + 1}–{min(end, total_rows)} of {total_rows} champions")
 
     return df.iloc[start:end]
-
+    
 def make_figure(sig_df, error_df,sort='Win Rate'):
     fig = go.Figure()
     if sort=='Win Rate':
@@ -290,18 +285,29 @@ with bigtab1:
         st.session_state['page_len'] = None if res_per_page == 'All' else int(res_per_page)
         
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Top","Jungle","Mid","Bot","Support"])
-    if "page" not in st.session_state:
-        st.session_state.page = 1
+    if "page_top" not in st.session_state:
+        st.session_state['page_top'] = 1
     with tab1:
         selected_classes = class_filter_ui('top')
         filtered_error, filtered_sig = filter_by_class(role_error['Top'], role_sig['Top'], selected_classes)
         filtered_error = pagination_ui(filtered_error)
-        if res_per_page is not None:
-            filtered_sig = filtered_sig[filtered_sig.champ in filtered_error.champ]        
-        if len(page_filtered_error) == 0:
+        if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
         else:
-            top_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
+            page_key = 'page_top'
+            if page_key not in st.session_state:
+                st.session_state[page_key] = 1
+    
+            paged_error = pagination_ui(filtered_error, page_key)
+    
+            paged_error = paged_error.copy()
+            paged_error['y'] = range(len(paged_error))
+    
+            y_map = {champ: i for i, champ in enumerate(paged_error['champ'])}
+            paged_sig = filtered_sig[filtered_sig['champ'].isin(paged_error['champ'])].copy()
+            paged_sig['y'] = paged_sig['champ'].map(y_map)
+    
+            top_fig = make_figure(paged_sig, paged_error, sort=sort_method)
             st.plotly_chart(top_fig)
     with tab2:
         selected_classes = class_filter_ui('jg')
@@ -310,7 +316,20 @@ with bigtab1:
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
         else:
-            jg_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
+            page_key = 'page_jg'
+            if page_key not in st.session_state:
+                st.session_state[page_key] = 1
+    
+            paged_error = pagination_ui(filtered_error, page_key)
+    
+            paged_error = paged_error.copy()
+            paged_error['y'] = range(len(paged_error))
+    
+            y_map = {champ: i for i, champ in enumerate(paged_error['champ'])}
+            paged_sig = filtered_sig[filtered_sig['champ'].isin(paged_error['champ'])].copy()
+            paged_sig['y'] = paged_sig['champ'].map(y_map)
+    
+            jg_fig = make_figure(paged_sig, paged_error, sort=sort_method)
             st.plotly_chart(jg_fig)
     with tab3:
         selected_classes = class_filter_ui('mid')
@@ -319,7 +338,20 @@ with bigtab1:
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
         else:
-            mid_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
+            page_key = 'page_mid'
+            if page_key not in st.session_state:
+                st.session_state[page_key] = 1
+    
+            paged_error = pagination_ui(filtered_error, page_key)
+    
+            paged_error = paged_error.copy()
+            paged_error['y'] = range(len(paged_error))
+    
+            y_map = {champ: i for i, champ in enumerate(paged_error['champ'])}
+            paged_sig = filtered_sig[filtered_sig['champ'].isin(paged_error['champ'])].copy()
+            paged_sig['y'] = paged_sig['champ'].map(y_map)
+    
+            mid_fig = make_figure(paged_sig, paged_error, sort=sort_method)
             st.plotly_chart(mid_fig)
     with tab4:
         selected_classes = class_filter_ui('bot')
@@ -328,7 +360,20 @@ with bigtab1:
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
         else:
-            bot_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
+            page_key = 'page_bot'
+            if page_key not in st.session_state:
+                st.session_state[page_key] = 1
+    
+            paged_error = pagination_ui(filtered_error, page_key)
+    
+            paged_error = paged_error.copy()
+            paged_error['y'] = range(len(paged_error))
+    
+            y_map = {champ: i for i, champ in enumerate(paged_error['champ'])}
+            paged_sig = filtered_sig[filtered_sig['champ'].isin(paged_error['champ'])].copy()
+            paged_sig['y'] = paged_sig['champ'].map(y_map)
+    
+            bot_fig = make_figure(paged_sig, paged_error, sort=sort_method)
             st.plotly_chart(bot_fig)
     with tab5:
         selected_classes = class_filter_ui('sup')
@@ -337,9 +382,21 @@ with bigtab1:
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
         else:
-            sup_fig = make_figure(filtered_sig, filtered_error, sort = sort_method)
+            page_key = 'page_sup'
+            if page_key not in st.session_state:
+                st.session_state[page_key] = 1
+    
+            paged_error = pagination_ui(filtered_error, page_key)
+    
+            paged_error = paged_error.copy()
+            paged_error['y'] = range(len(paged_error))
+    
+            y_map = {champ: i for i, champ in enumerate(paged_error['champ'])}
+            paged_sig = filtered_sig[filtered_sig['champ'].isin(paged_error['champ'])].copy()
+            paged_sig['y'] = paged_sig['champ'].map(y_map)
+    
+            sup_fig = make_figure(paged_sig, paged_error, sort=sort_method)
             st.plotly_chart(sup_fig)
-
 with bigtab2:
     domtab1, domtab2 = st.tabs(['Tool','Instructions'])
     with domtab1:
