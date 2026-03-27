@@ -387,7 +387,7 @@ with bigtab2:
             excluded = set(chosen + [selected_champ])
             return [c for c in all_champs if c not in excluded]
     
-        def score_candidate(e, uncovered, uncovered_totals, full_df, threshold):
+        def score_candidate(e, uncovered, uncovered_totals, full_df, threshold, total_threat_weight):
             covered_weight = 0
             tiebreak = 0
             for opp, total in zip(uncovered, uncovered_totals):
@@ -395,7 +395,8 @@ with bigtab2:
                 if wr > threshold:
                     covered_weight += total
                     tiebreak += (wr - threshold) * total
-            return covered_weight, tiebreak
+            pct_gain = covered_weight / total_threat_weight if total_threat_weight > 0 else 0
+            return covered_weight, tiebreak, pct_gain
     
         # --- compute coverage state ---
         chosen = st.session_state['chosen_champions']
@@ -426,10 +427,10 @@ with bigtab2:
                 unsafe_allow_html=True
             )
             st.markdown(
-                '<div style="text-align: center; font-size: 12px; color: grey;">Weighted matchup coverage</div>',
+                '<div style="text-align: left; font-size: 14px; color: grey;">Weighted matchup coverage %{weighted_pct:.2f}</div>',
                 unsafe_allow_html=True
             )
-            st.markdown(progress_bar(weighted_pct, color='#2951f2'), unsafe_allow_html=True)
+            st.markdown(progress_bar(weighted_pct, color='##26b000'), unsafe_allow_html=True)
     
              # --- chosen champions ---
             if len(chosen) > 1:
@@ -454,24 +455,24 @@ with bigtab2:
                 candidates = get_candidates(chosen, selected_champ, full_df)
                 scored = []
                 for e in candidates:
-                    count, tiebreak = score_candidate(e, uncovered, uncovered_totals, full_df, threshold)
-                    scored.append((e, count, tiebreak))
+                    count, tiebreak, pct_gain = score_candidate(e, uncovered, uncovered_totals, full_df, threshold, total_threat_weight)
+                    scored.append((e, count, tiebreak, pct_gain))
                 scored.sort(key=lambda x: (x[1], x[2]), reverse=True)
                 top5 = scored[:5]
     
-                for e, count, _ in top5:
-                    col1, col2 = st.columns([1, 2])
-                    with col1:
-                        st.markdown(
-                            f'<div style="text-align: center;"><img src="{get_icon_url(e)}" width="35"/>',
-                            unsafe_allow_html=True
-                        )
-                        if st.button('Add', key=f'add_{e}'):
-                            st.session_state['chosen_champions'].append(e)
-                            st.rerun()
-                    with col2:
-                        st.markdown(f'**{e}**')
-                        st.markdown(f'{count}/{len(uncovered)} covered')
+                for e, count, _, pct_gain in top5:
+                col1, col2 = st.columns([1, 2])
+                with col1:
+                    st.markdown(
+                        f'<div style="text-align: center;"><img src="{get_icon_url(e)}" width="35"/>',
+                        unsafe_allow_html=True
+                    )
+                    if st.button('Add', key=f'add_{e}'):
+                        st.session_state['chosen_champions'].append(e)
+                        st.rerun()
+                with col2:
+                    st.markdown(f'**{e}**')
+                    st.markdown(f'+{pct_gain*100:.1f}% coverage')
                 
                 new_champ = st.selectbox(
                     'Add a champion',
