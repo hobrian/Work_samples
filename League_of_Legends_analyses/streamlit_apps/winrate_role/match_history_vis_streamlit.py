@@ -10,16 +10,21 @@ def get_icon_url(champ_name):
     if champ_name=='Wukong':
         champ_name='MonkeyKing'
     return f'https://ddragon.leagueoflegends.com/cdn/16.6.1/img/champion/{champ_name}.png'
-def filter_by_class(error_df, sig_df, selected_classes):
-    """Filter error_df and sig_df to only include champions in selected classes."""
+def filter_by_class(error_df, sig_df, selected_classes, sort='Win Rate'):
     def champ_in_classes(champ):
         tags = champ_classes.get(champ, [])
         return any(t in selected_classes for t in tags)
     
-    filtered_error = error_df[error_df['champ'].apply(champ_in_classes)].reset_index(drop=True)
-    filtered_error['y'] = range(len(filtered_error))  # reindex y positions
+    filtered_error = error_df[error_df['champ'].apply(champ_in_classes)].copy()
     
-    # remap sig_df y positions to match filtered error_df
+    if sort == 'Win Rate':
+        filtered_error = filtered_error.sort_values('x', ascending=True)
+    elif sort == 'Alphabetical':
+        filtered_error = filtered_error.sort_values('champ', ascending=False)
+    
+    filtered_error = filtered_error.reset_index(drop=True)
+    filtered_error['y'] = range(len(filtered_error))
+    
     y_map = {champ: i for i, champ in enumerate(filtered_error['champ'])}
     filtered_sig = sig_df[sig_df['champ'].apply(champ_in_classes)].copy()
     filtered_sig['y'] = filtered_sig['champ'].map(y_map)
@@ -71,15 +76,18 @@ def pagination_ui(df, page_key):
     
 def make_figure(sig_df, error_df,sort='Win Rate'):
     fig = go.Figure()
-    if sort=='Win Rate':
-        y1 = sig_df.loc[:,'y']
-        y2 = error_df.loc[:,'y']
-        yax_label = error_df.loc[:,'champ']
-    elif sort == 'Alphabetical':
-        y_dict = {y:x for x,y in enumerate(error_df.sort_values('champ',ascending=False).champ)}
-        y1 = [y_dict[i] for i in sig_df.champ]
-        y2 = [y_dict[i] for i in error_df.champ]
-        yax_label = error_df.sort_values('champ',ascending=False).champ
+    y1 = sig_df.loc[:, 'y']
+    y2 = error_df.loc[:, 'y']
+    yax_label = error_df.loc[:, 'champ']
+    # if sort=='Win Rate':
+    #     y1 = sig_df.loc[:,'y']
+    #     y2 = error_df.loc[:,'y']
+    #     yax_label = error_df.loc[:,'champ']
+    # elif sort == 'Alphabetical':
+    #     y_dict = {y:x for x,y in enumerate(error_df.sort_values('champ',ascending=False).champ)}
+    #     y1 = [y_dict[i] for i in sig_df.champ]
+    #     y2 = [y_dict[i] for i in error_df.champ]
+    #     yax_label = error_df.sort_values('champ',ascending=False).champ
     fig.add_trace(
         go.Scatter(
             x=sig_df.loc[:,'x'],
@@ -280,7 +288,7 @@ with bigtab1:
         
     with tab1:
         selected_classes = class_filter_ui('top')
-        filtered_error, filtered_sig = filter_by_class(role_error['Top'], role_sig['Top'], selected_classes)
+        filtered_error, filtered_sig = filter_by_class(role_error['Top'], role_sig['Top'], selected_classes, sort=sort_method)
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
         else:
@@ -301,7 +309,7 @@ with bigtab1:
             st.plotly_chart(top_fig)
     with tab2:
         selected_classes = class_filter_ui('jg')
-        filtered_error, filtered_sig = filter_by_class(role_error['Jungle'], role_sig['Jungle'], selected_classes)
+        filtered_error, filtered_sig = filter_by_class(role_error['Jungle'], role_sig['Jungle'], selected_classes, sort=sort_method)
         
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
@@ -323,7 +331,7 @@ with bigtab1:
             st.plotly_chart(jg_fig)
     with tab3:
         selected_classes = class_filter_ui('mid')
-        filtered_error, filtered_sig = filter_by_class(role_error['Mid'], role_sig['Mid'], selected_classes)
+        filtered_error, filtered_sig = filter_by_class(role_error['Mid'], role_sig['Mid'], selected_classes, sort=sort_method)
         
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
@@ -345,7 +353,7 @@ with bigtab1:
             st.plotly_chart(mid_fig)
     with tab4:
         selected_classes = class_filter_ui('bot')
-        filtered_error, filtered_sig = filter_by_class(role_error['Bot'], role_sig['Bot'], selected_classes)
+        filtered_error, filtered_sig = filter_by_class(role_error['Bot'], role_sig['Bot'], selected_classes, sort=sort_method)
         
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
@@ -367,7 +375,7 @@ with bigtab1:
             st.plotly_chart(bot_fig)
     with tab5:
         selected_classes = class_filter_ui('sup')
-        filtered_error, filtered_sig = filter_by_class(role_error['Support'], role_sig['Support'], selected_classes)
+        filtered_error, filtered_sig = filter_by_class(role_error['Support'], role_sig['Support'], selected_classes, sort=sort_method)
         
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
