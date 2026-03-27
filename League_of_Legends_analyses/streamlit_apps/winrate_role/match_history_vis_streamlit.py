@@ -10,22 +10,23 @@ def get_icon_url(champ_name):
     if champ_name=='Wukong':
         champ_name='MonkeyKing'
     return f'https://ddragon.leagueoflegends.com/cdn/16.6.1/img/champion/{champ_name}.png'
+
 def filter_by_class(error_df, sig_df, selected_classes):
-    """Filter error_df and sig_df to only include champions in selected classes."""
     def champ_in_classes(champ):
         tags = champ_classes.get(champ, [])
         return any(t in selected_classes for t in tags)
     
-    filtered_error = error_df[error_df['champ'].apply(champ_in_classes)].reset_index(drop=True)
-    filtered_error['y'] = range(len(filtered_error))  # reindex y positions
+    filtered_error = error_df[error_df['champ'].apply(champ_in_classes)]\
+        .sort_values('x', ascending=False)\
+        .reset_index(drop=True)
+    filtered_error['y'] = range(len(filtered_error))
     
-    # remap sig_df y positions to match filtered error_df
     y_map = {champ: i for i, champ in enumerate(filtered_error['champ'])}
     filtered_sig = sig_df[sig_df['champ'].apply(champ_in_classes)].copy()
     filtered_sig['y'] = filtered_sig['champ'].map(y_map)
     
     return filtered_error, filtered_sig
-
+    
 def class_filter_ui(tab_key):
     """Render horizontal class filter checkboxes, returns list of selected classes."""
     st.markdown('**Filter by class:**')
@@ -76,10 +77,11 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
         y2 = error_df.loc[:,'y']
         yax_label = error_df.loc[:,'champ']
     elif sort == 'Alphabetical':
-        y_dict = {y:x for x,y in enumerate(error_df.sort_values('champ',ascending=False).champ)}
-        y1 = [y_dict[i] for i in sig_df.champ]
-        y2 = [y_dict[i] for i in error_df.champ]
-        yax_label = error_df.sort_values('champ',ascending=False).champ
+        sorted_error = error_df.sort_values('champ', ascending=False)
+        y_dict = {champ: i for i, champ in enumerate(sorted_error['champ'])}
+        y1 = [y_dict[i] for i in sig_df['champ']]
+        y2 = [y_dict[i] for i in error_df['champ']]
+        yax_label = sorted_error['champ']
     fig.add_trace(
         go.Scatter(
             x=sig_df.loc[:,'x'],
