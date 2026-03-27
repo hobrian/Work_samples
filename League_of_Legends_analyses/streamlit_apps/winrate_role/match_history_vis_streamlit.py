@@ -290,7 +290,6 @@ with bigtab1:
     with tab1:
         selected_classes = class_filter_ui('top')
         filtered_error, filtered_sig = filter_by_class(role_error['Top'], role_sig['Top'], selected_classes)
-        filtered_error = pagination_ui(filtered_error)
         if len(filtered_error) == 0:
             st.info('No champions match the selected classes.')
         else:
