@@ -51,7 +51,7 @@ def pagination_ui(df, page_key):
     page_size = st.session_state['page_len'] if st.session_state['page_len'] is not None else total_rows
     total_pages = int(max(1, np.ceil(total_rows / page_size)))
 
-    col1, col2, col3, col4 = st.columns([1, 2, 2, 2])
+    col0, col1, col2, col3, col4 = st.columns([1, 1, 2, 2, 2])
 
     with col1:
         if st.button("⬅️", key=f'prev_{page_key}', disabled=(st.session_state[page_key] == 1)):
@@ -66,19 +66,6 @@ def pagination_ui(df, page_key):
             st.session_state[page_key] += 1
             st.rerun()
 
-    with col4:
-        jump_page = st.number_input(
-            "Go to",
-            min_value=1,
-            max_value=total_pages,
-            value=st.session_state[page_key],
-            step=1,
-            key=f'jump_{page_key}',
-            label_visibility="collapsed"
-        )
-        if jump_page != st.session_state[page_key]:
-            st.session_state[page_key] = jump_page
-            st.rerun()
 
     start = (st.session_state[page_key] - 1) * page_size
     end = start + page_size
