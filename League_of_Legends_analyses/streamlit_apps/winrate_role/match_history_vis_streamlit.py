@@ -427,7 +427,7 @@ with bigtab2:
                 unsafe_allow_html=True
             )
             st.markdown(
-                '<div style="text-align: left; font-size: 14px; color: grey;">Weighted matchup coverage %{weighted_pct:.2f}</div>',
+                '<div style="text-align: left; font-size: 14px; ">Weighted matchup coverage: {weighted_pct*100:.0f}%</div>',
                 unsafe_allow_html=True
             )
             st.markdown(progress_bar(weighted_pct, color='##26b000'), unsafe_allow_html=True)
@@ -472,7 +472,7 @@ with bigtab2:
                             st.rerun()
                     with col2:
                         st.markdown(f'**{e}**')
-                        st.markdown(f'+{pct_gain*100:.1f}% coverage')
+                        st.markdown(f'+{pct_gain*100:.0f}% coverage')
                 
                 new_champ = st.selectbox(
                     'Add a champion',
