@@ -52,7 +52,7 @@ def pagination_ui(df):
         page_size = total_rows
     else:
         page_size = st.session_state['page_len']
-    total_pages = max(1, math.ceil(total_rows / page_size))
+    total_pages = max(1, np.ceil(total_rows / page_size))
     col1, col2, col3, col4 = st.columns([1, 2, 2, 2])
     
     # Prev button
