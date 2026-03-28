@@ -17,8 +17,6 @@ champion performance and matchup dynamics in League of Legends.
 - Analyze champion-vs-champion matchup outcomes in Emerald+ for patch 16.5
 - Build predictive models for matchup win rates
 
-## Analyses
-
 ## Project Structure
 ```
 League_of_Legends_analyses/
