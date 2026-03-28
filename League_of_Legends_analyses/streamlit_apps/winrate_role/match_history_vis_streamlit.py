@@ -243,7 +243,7 @@ class_icon_paths = {
     'Support':    f'{github_raw}/Controller_icon.png',
 }
 
-st.title("LoL Patch 26.5 Champion Win Rate by Role")
+st.title("Counterpick Coverage Tool - Patch 26.5")
 
 texttab0, texttab1, texttab2 = st.tabs(["Description","Background","Technical Info"])
 with texttab0:
