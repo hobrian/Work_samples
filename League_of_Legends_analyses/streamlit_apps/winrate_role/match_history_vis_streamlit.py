@@ -594,10 +594,10 @@ with bigtab2:
                     col1, col2 = st.columns([1, 2])
                     with col1:
                         st.markdown(
-                            f'<div style="text-align: center;"><img src="{get_icon_url(e)}" width="35"/>',
+                            f'<div style="text-align: center;"><img src="{get_icon_url(e)}" width="35"/></div>',
                             unsafe_allow_html=True
                         )
-                        if st.button('Add', key=f'add_{e}'):
+                        if st.button('Add', key=f'add_{e}', use_container_width=True):
                             st.session_state['chosen_champions'].append(e)
                             st.rerun()
                     with col2:
