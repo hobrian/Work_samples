@@ -655,7 +655,7 @@ with bigtab2:
             1. Select your role using the position icons at the top of the page
             2. Choose your main champion from the dropdown
             3. Your champion's significant unfavorable matchups will appear as a grid on the right 
-            4. Browse the recommended backup champions ranked by how well they cover your threat set
+            4. Browse the recommended backup champions on the left panel, ranked by how much weighted coverage they add to your remaining uncovered threats
             5. Select a backup champion to add them to your coverage set. The bars will update to reflect how much of your threat set is now covered
             6. Continue adding champions (up to 3), or enter your own champion to see how it performs
             """
@@ -668,6 +668,6 @@ with bigtab2:
                )
         st.subheader('Recommendation Methodology')
         st.text("""
-At each step the tool recommends the backup champion that adds the most coverage to your remaining uncovered threats. Coverage is determined by having a greater win rate than the user-selected threshold. Once a threat is covered by a champion in your set, the algorithm continues to suggest the next champ that will cover the most remaining uncovered threats.
+At each step the tool recommends the backup champion that adds the most coverage to your remaining uncovered threats. Coverage is determined by having a greater win rate than the user-selected threshold. The coverage is weighted based on the frequency of the matchup. Once a threat is covered by a champion in your set, the algorithm continues to suggest the next champ that will cover the most remaining uncovered threats.
 While the tool will recommend a set of champs that increases the coverage as much as possible, League of Legends is a game and is meant to be fun! Everyone should play the champs that they enjoy, so you are able to select your own champs to add to the "dominator set" and see how they may improve the coverage of your threat set. 
 """)
