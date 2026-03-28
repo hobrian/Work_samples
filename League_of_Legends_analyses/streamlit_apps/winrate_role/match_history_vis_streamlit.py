@@ -482,6 +482,7 @@ with bigtab2:
         # --- data ---
         sig_df = role_sig[selected_role]
         full_df = role_full[selected_role]
+        wr_lookup = full_df.set_index('matchup')['wr_corrected'].to_dict()
     
         # --- threat set ---
         threats = full_df[
@@ -492,11 +493,7 @@ with bigtab2:
     
         # --- coverage helpers ---
         def get_wr(champ, opp):
-            key = f'{champ}_{opp}'
-            match = full_df[full_df.iloc[:, 0] == key]
-            if len(match) > 0:
-                return match.iloc[0]['wr_corrected']
-            return 0
+            return wr_lookup.get(f'{champ}_{opp}', 0)
     
         def get_coverage(chosen, threats):
             coverage = {}
