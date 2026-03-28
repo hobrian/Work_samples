@@ -576,7 +576,6 @@ with bigtab2:
                 if st.button('Undo last'):
                     st.session_state['chosen_champions'].pop()
                     st.rerun()
-                st.markdown('<div style="margin-top: -20px;"></div>', unsafe_allow_html=True)
 
             st.markdown('---')
 
