@@ -79,20 +79,13 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
     y1 = sig_df.loc[:, 'y']
     y2 = error_df.loc[:, 'y']
     yax_label = error_df.loc[:, 'champ']
-    # if sort=='Win Rate':
-    #     y1 = sig_df.loc[:,'y']
-    #     y2 = error_df.loc[:,'y']
-    #     yax_label = error_df.loc[:,'champ']
-    # elif sort == 'Alphabetical':
-    #     y_dict = {y:x for x,y in enumerate(error_df.sort_values('champ',ascending=False).champ)}
-    #     y1 = [y_dict[i] for i in sig_df.champ]
-    #     y2 = [y_dict[i] for i in error_df.champ]
-    #     yax_label = error_df.sort_values('champ',ascending=False).champ
+
     fig.add_trace(
         go.Scatter(
             x=sig_df.loc[:,'x'],
             y=y1, 
             mode='markers',
+            name='Outlier matchup',
             marker=dict(
                 color='blue',
                 symbol='diamond'
@@ -105,6 +98,7 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
             x=error_df.loc[:,'x'],
             y=y2, 
             mode='markers',
+            name='Empirical avg win rate',
             error_x=dict(
                 type='data',
                 symmetric=False,
@@ -118,6 +112,16 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
             ),
             hoverinfo='skip'
         ))
+    fig.add_trace(
+        go.Scatter(
+            x=[None],
+            y=[None],
+            mode='lines',
+            name='99% credible interval',
+            line=dict(color='white', width=2),
+            showlegend=True
+        ))
+
     fig.add_vline(
         x=0.5,
         line=dict(
@@ -143,7 +147,14 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
         height=2000*len(error_df)/130+100,
         margin=dict(t=10),
         yaxis=dict(showgrid=False),
-        showlegend=False
+        showlegend=True,
+        legend=dict(
+            orientation='h',
+            yanchor='bottom',
+            y=1.02,
+            xanchor='left',
+            x=0
+        )
     )
     return fig
 
