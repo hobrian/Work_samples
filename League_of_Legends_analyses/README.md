@@ -5,6 +5,9 @@ champion performance and matchup dynamics in League of Legends.
 
 > 🚧 **Work in Progress** — additional analyses are actively being added.
 
+### App List
+🔗 [Counterpick Coverage Tool](https://lol-counterpick-coverage.streamlit.app/)
+
 ---
 
 ## Project Goals
@@ -28,6 +31,8 @@ League_of_Legends_analyses/
 ├── Jupyter notebooks/
 │   ├── riot_queried_summoners.ipynb    # statistical analysis of summoner query sample
 │   └── match_history_qc.py             # Sankey visualizations of filtering of match histories
+├── streamlit_apps/
+│   ├── winrate_role/                   # Streamlit app showing win rates & tool to identify champions that cover counterpicks
 ```
 
 ## Data Source
@@ -77,4 +82,5 @@ A `config.json` file is used to store API credentials and pipeline settings. I u
 - REST API data collection
 - Data cleaning and quality control
 - Exploratory data analysis
+- Bayesian statistics
 - *(upcoming)* Machine learning
