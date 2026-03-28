@@ -569,9 +569,10 @@ with bigtab2:
                 for col,champ_nam in zip(cols,chosen[1:]):
                     with col:
                         st.markdown(
-                            f'<img src="{get_icon_url(champ_nam)}" width="35"/>',
+                            f'<img src="{get_icon_url(champ_nam)}" width="55"/>',
                             unsafe_allow_html=True
                         )
+                st.markdown('<div style="padding-top: 10px;"></div>', unsafe_allow_html=True)
                 if st.button('Undo last'):
                     st.session_state['chosen_champions'].pop()
                     st.rerun()
