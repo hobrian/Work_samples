@@ -15,6 +15,8 @@ Personal project using the Riot Games API to collect and analyze champion matchu
 
 → [View project](./League_of_Legends_analyses/)
 
+### App List
+🔗 [Counterpick Coverage Tool](https://lol-counterpick-coverage.streamlit.app/)
 ---
 
 ### 🧬 Westbrook Lab — Cancer Transcriptomics Analysis
