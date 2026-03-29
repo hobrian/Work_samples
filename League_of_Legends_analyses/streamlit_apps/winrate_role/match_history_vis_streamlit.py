@@ -547,21 +547,24 @@ with bigtab2:
             coverage = get_coverage(chosen, threat_pool)
             uncovered = []
             uncovered_totals = []
+            pool_threats = full_df[
+                (full_df['champ'] == selected_champ) &
+                (full_df['opp'].isin(threat_pool))
+            ].copy()
+            
             for opp in threat_pool:
                 if coverage[opp]['best_wr'] <= threshold:
                     uncovered.append(opp)
-                    uncovered_totals.append(threats.loc[threats['opp'] == opp, 'total'].values[0])
+                    uncovered_totals.append(pool_threats.loc[pool_threats['opp'] == opp, 'total'].values[0])
             
-            total_threat_weight = threats[threats['opp'].isin(threat_pool)]['total'].sum()
+            total_threat_weight = total_threat_weight = pool_threats['total'].sum()
             covered_weight = sum(
-                threats.loc[threats['opp'] == opp, 'total'].values[0]
+                pool_threats.loc[pool_threats['opp'] == opp, 'total'].values[0]
                 for opp in threat_pool
                 if coverage[opp]['best_wr'] > threshold
             )
             weighted_pct = covered_weight / total_threat_weight if total_threat_weight > 0 else 0
-            
-            pool_threats = threats[threats['opp'].isin(threat_pool)]
-            
+                        
             if len(pool_threats) == 0:
                 st.info(f'{selected_champ} has no threats in pool.')
             else:
