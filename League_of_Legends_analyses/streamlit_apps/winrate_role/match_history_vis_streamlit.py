@@ -459,15 +459,6 @@ with bigtab2:
             key='selected_champ'
         )
     
-        # reset chosen if main champ changes
-        if st.session_state.get('last_champ') != selected_champ:
-            st.session_state['chosen_champions'] = [selected_champ]
-            st.session_state['last_champ'] = selected_champ
-    
-        # --- initialize session state ---
-        if 'chosen_champions' not in st.session_state:
-            st.session_state['chosen_champions'] = [selected_champ]
-    
         # --- slider ---
         
         threshold = st.slider(
@@ -490,6 +481,16 @@ with bigtab2:
             (full_df['delta'] == -1)
         ].copy()
         threat_opps = threats.loc[:,'opp'].tolist()
+
+        # reset chosen if main champ changes
+        if st.session_state.get('last_champ') != selected_champ:
+            st.session_state['chosen_champions'] = [selected_champ]
+            st.session_state['last_champ'] = selected_champ
+            st.session_state['threat_pool'] = threat_opps.copy()
+    
+        # --- initialize session state ---
+        if 'chosen_champions' not in st.session_state:
+            st.session_state['chosen_champions'] = [selected_champ]
     
         # --- coverage helpers ---
         def get_wr(champ, opp):
@@ -629,18 +630,19 @@ with bigtab2:
                         display_wr = np.maximum(cov['best_wr'], row['wr_corrected'])
     
                         with col:
-                            # threat icon
-                            st.markdown(
-                                f'<div style="text-align: center;"><img src="{get_icon_url(opp)}" width="50"/></div>',
-                                unsafe_allow_html=True
-                            )
-                            # bar — green if covered, red if not
+                            icon_col, x_col = st.columns([3, 1])
+                            with icon_col:
+                                st.markdown(
+                                    f'<div style="text-align: center;"><img src="{get_icon_url(opp)}" width="50"/></div>',
+                                    unsafe_allow_html=True
+                                )
+                            with x_col:
+                                st.markdown('<div style="padding-top: 10px;"></div>', unsafe_allow_html=True)
+                                if st.button('❌', key=f'remove_{opp}_{selected_champ}'):
+                                    st.session_state[f'threat_pool_{selected_champ}'].remove(opp)
+                                    st.rerun()
                             bar_color = '#2951f2' if is_covered else '#e32020'
-                            st.markdown(
-                                progress_bar(display_wr, color=bar_color),
-                                unsafe_allow_html=True
-                            )
-                            # covering champion icon
+                            st.markdown(progress_bar(display_wr, color=bar_color), unsafe_allow_html=True)
                             if is_covered and cov['best_champ']:
                                 st.markdown(
                                     f'<div style="text-align: center;"><img src="{get_icon_url(cov["best_champ"])}" width="25"/></div>',
