@@ -491,6 +491,9 @@ with bigtab2:
         # --- initialize session state ---
         if 'chosen_champions' not in st.session_state:
             st.session_state['chosen_champions'] = [selected_champ]
+
+        if 'threat_pool' not in st.session_state:
+            st.session_state['threat_pool'] = threat_opps.copy()
     
         # --- coverage helpers ---
         def get_wr(champ, opp):
@@ -614,7 +617,6 @@ with bigtab2:
                 st.info('Coverage set is full.') 
            
         with right:
-            threat_pool = st.session_state.get('threat_pool', threat_opps)
             pool_threats = threats[threats['opp'].isin(threat_pool)]
             
             if len(pool_threats) == 0:
@@ -633,7 +635,7 @@ with bigtab2:
                         display_wr = np.maximum(cov['best_wr'], row['wr_corrected'])
     
                         with col:
-                            icon_col, x_col = st.columns([3, 1])
+                            _, icon_col, x_col, _ = st.columns([2, 5, 1, 2])
                             with icon_col:
                                 st.markdown(
                                     f'<div style="text-align: center;"><img src="{get_icon_url(opp)}" width="50"/></div>',
