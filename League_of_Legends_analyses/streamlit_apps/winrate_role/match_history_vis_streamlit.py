@@ -483,7 +483,7 @@ with bigtab2:
         threat_opps = threats.loc[:,'opp'].tolist()
 
         # reset chosen if main champ changes
-        if st.session_state.get('last_champ') != selected_champ:
+        if st.session_state.get('last_champ') != selected_champ or st.session_state.get('last_role') != selected_role:
             st.session_state['chosen_champions'] = [selected_champ]
             st.session_state['last_champ'] = selected_champ
     
@@ -532,7 +532,7 @@ with bigtab2:
                 'Threat pool',
                 options=threat_opps,
                 default=threat_opps,
-                key=f'threat_pool_{selected_champ}'
+                key=f'threat_pool_{selected_role}_{selected_champ}'
             )
 
             # --- compute coverage state ---
