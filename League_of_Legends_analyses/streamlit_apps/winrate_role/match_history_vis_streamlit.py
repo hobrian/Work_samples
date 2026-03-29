@@ -537,7 +537,6 @@ with bigtab2:
 
             # --- compute coverage state ---
             chosen = st.session_state['chosen_champions']
-            threat_pool = st.session_state.get('threat_pool', threat_opps)
             coverage = get_coverage(chosen, threat_pool)
             uncovered = []
             uncovered_totals = []
