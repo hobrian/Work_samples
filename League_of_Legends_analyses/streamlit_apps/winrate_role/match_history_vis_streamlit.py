@@ -643,7 +643,7 @@ with bigtab2:
                                 )
                             with x_col:
                                 st.markdown('<div style="padding-top: 10px;"></div>', unsafe_allow_html=True)
-                                if st.button('✕', key=f'remove_{opp}_{selected_champ}'):
+                                if st.button('x', key=f'remove_{opp}_{selected_champ}'):
                                     st.session_state['threat_pool'].remove(opp)
                                     st.rerun()
                             # these must be outside icon_col/x_col but inside col
