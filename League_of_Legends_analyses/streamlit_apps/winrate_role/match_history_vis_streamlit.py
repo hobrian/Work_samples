@@ -639,7 +639,7 @@ with bigtab2:
                             with x_col:
                                 st.markdown('<div style="padding-top: 10px;"></div>', unsafe_allow_html=True)
                                 if st.button('❌', key=f'remove_{opp}_{selected_champ}'):
-                                    st.session_state[f'threat_pool_{selected_champ}'].remove(opp)
+                                    st.session_state[f'threat_pool'].remove(opp)
                                     st.rerun()
                             bar_color = '#2951f2' if is_covered else '#e32020'
                             st.markdown(progress_bar(display_wr, color=bar_color), unsafe_allow_html=True)
