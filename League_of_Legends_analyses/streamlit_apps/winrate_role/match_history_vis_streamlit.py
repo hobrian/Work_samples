@@ -486,14 +486,10 @@ with bigtab2:
         if st.session_state.get('last_champ') != selected_champ:
             st.session_state['chosen_champions'] = [selected_champ]
             st.session_state['last_champ'] = selected_champ
-            st.session_state['threat_pool'] = threat_opps.copy()
     
         # --- initialize session state ---
         if 'chosen_champions' not in st.session_state:
             st.session_state['chosen_champions'] = [selected_champ]
-
-        if 'threat_pool' not in st.session_state:
-            st.session_state['threat_pool'] = threat_opps.copy()
     
         # --- coverage helpers ---
         def get_wr(champ, opp):
@@ -528,28 +524,68 @@ with bigtab2:
             pct_gain = covered_weight / total_threat_weight if total_threat_weight > 0 else 0
             return covered_weight, tiebreak, pct_gain
     
-        # --- compute coverage state ---
-        chosen = st.session_state['chosen_champions']
-        threat_pool = st.session_state.get('threat_pool', threat_opps)
-        coverage = get_coverage(chosen, threat_pool)
-        uncovered = []
-        uncovered_totals = []
-        for opp in threat_pool:
-            if coverage[opp]['best_wr'] <= threshold:
-                uncovered.append(opp)
-                uncovered_totals.append(threats.loc[threats['opp'] == opp, 'total'].values[0])
-        
-        total_threat_weight = threats[threats['opp'].isin(threat_pool)]['total'].sum()
-        covered_weight = sum(
-            threats.loc[threats['opp'] == opp, 'total'].values[0]
-            for opp in threat_pool
-            if coverage[opp]['best_wr'] > threshold
-        )
-        weighted_pct = covered_weight / total_threat_weight if total_threat_weight > 0 else 0
-    
         # --- layout ---
         left, right = st.columns([1, 3])
+
+        with right:
+            threat_pool = st.multiselect(
+                'Threat pool',
+                options=threat_opps,
+                default=threat_opps,
+                key=f'threat_pool_{selected_champ}'
+            )
+
+            # --- compute coverage state ---
+            chosen = st.session_state['chosen_champions']
+            threat_pool = st.session_state.get('threat_pool', threat_opps)
+            coverage = get_coverage(chosen, threat_pool)
+            uncovered = []
+            uncovered_totals = []
+            for opp in threat_pool:
+                if coverage[opp]['best_wr'] <= threshold:
+                    uncovered.append(opp)
+                    uncovered_totals.append(threats.loc[threats['opp'] == opp, 'total'].values[0])
+            
+            total_threat_weight = threats[threats['opp'].isin(threat_pool)]['total'].sum()
+            covered_weight = sum(
+                threats.loc[threats['opp'] == opp, 'total'].values[0]
+                for opp in threat_pool
+                if coverage[opp]['best_wr'] > threshold
+            )
+            weighted_pct = covered_weight / total_threat_weight if total_threat_weight > 0 else 0
+            
+            pool_threats = threats[threats['opp'].isin(threat_pool)]
+            
+            if len(pool_threats) == 0:
+                st.info(f'{selected_champ} has no threats in pool.')
+            else:
+                cols_per_row = 5
+                rows = [pool_threats.iloc[i:i+cols_per_row] 
+                        for i in range(0, len(pool_threats), cols_per_row)]
     
+                for row_df in rows:
+                    cols = st.columns(cols_per_row)
+                    for col, (_, row) in zip(cols, row_df.iterrows()):
+                        opp = row['opp']
+                        cov = coverage[opp]
+                        is_covered = cov['best_wr'] > threshold
+                        display_wr = np.maximum(cov['best_wr'], row['wr_corrected'])
+    
+                        with col:
+                            st.markdown(
+                                f'<div style="text-align: center;"><img src="{get_icon_url(opp)}" width="50"/></div>',
+                                unsafe_allow_html=True
+                            )
+                           
+                            # these must be outside icon_col/x_col but inside col
+                            bar_color = '#2951f2' if is_covered else '#e32020'
+                            st.markdown(progress_bar(display_wr, color=bar_color), unsafe_allow_html=True)
+                            if is_covered and cov['best_champ']:
+                                st.markdown(
+                                    f'<div style="text-align: center;"><img src="{get_icon_url(cov["best_champ"])}" width="25"/></div>',
+                                    unsafe_allow_html=True
+                                )
+        
         with left:
             # selected champ icon
             st.markdown(
@@ -616,44 +652,7 @@ with bigtab2:
             else:
                 st.info('Coverage set is full.') 
            
-        with right:
-            pool_threats = threats[threats['opp'].isin(threat_pool)]
-            
-            if len(pool_threats) == 0:
-                st.info(f'{selected_champ} has no threats in pool.')
-            else:
-                cols_per_row = 5
-                rows = [pool_threats.iloc[i:i+cols_per_row] 
-                        for i in range(0, len(pool_threats), cols_per_row)]
-    
-                for row_df in rows:
-                    cols = st.columns(cols_per_row)
-                    for col, (_, row) in zip(cols, row_df.iterrows()):
-                        opp = row['opp']
-                        cov = coverage[opp]
-                        is_covered = cov['best_wr'] > threshold
-                        display_wr = np.maximum(cov['best_wr'], row['wr_corrected'])
-    
-                        with col:
-                            _, icon_col, x_col, _ = st.columns([2, 5, 1, 2])
-                            with icon_col:
-                                st.markdown(
-                                    f'<div style="text-align: center;"><img src="{get_icon_url(opp)}" width="50"/></div>',
-                                    unsafe_allow_html=True
-                                )
-                            with x_col:
-                                st.markdown('<div style="padding-top: 10px;"></div>', unsafe_allow_html=True)
-                                if st.button('x', key=f'remove_{opp}_{selected_champ}'):
-                                    st.session_state['threat_pool'].remove(opp)
-                                    st.rerun()
-                            # these must be outside icon_col/x_col but inside col
-                            bar_color = '#2951f2' if is_covered else '#e32020'
-                            st.markdown(progress_bar(display_wr, color=bar_color), unsafe_allow_html=True)
-                            if is_covered and cov['best_champ']:
-                                st.markdown(
-                                    f'<div style="text-align: center;"><img src="{get_icon_url(cov["best_champ"])}" width="25"/></div>',
-                                    unsafe_allow_html=True
-                                )
+        
 
     with domtab2:
         st.subheader('How to Use This Tool')
