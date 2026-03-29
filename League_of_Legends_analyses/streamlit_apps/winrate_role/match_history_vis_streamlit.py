@@ -528,12 +528,19 @@ with bigtab2:
         left, right = st.columns([1, 3])
 
         with right:
-            threat_pool = st.multiselect(
+            threat_options = [f'⚠️ {opp}' for opp in threat_opps]
+            other_options = [nam for nam in role_champs if nam not in threat_opps + [selected_champ]]
+            all_options = threat_options + other_options
+            
+            raw_selection = st.multiselect(
                 'Threat pool',
-                options=threat_opps,
-                default=threat_opps,
+                options=all_options,
+                default=threat_options,
                 key=f'threat_pool_{selected_role}_{selected_champ}'
             )
+            
+            # strip prefix to get clean champion names
+            threat_pool = [o.replace('⚠️ ', '') for o in raw_selection]
 
             # --- compute coverage state ---
             chosen = st.session_state['chosen_champions']
