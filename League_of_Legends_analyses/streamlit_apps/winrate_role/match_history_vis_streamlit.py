@@ -110,7 +110,8 @@ def make_figure(sig_df, error_df,sort='Win Rate'):
                 color='red',
                 symbol='circle'
             ),
-            hoverinfo='skip'
+            text=error_df.loc[:,'champ'],
+            hovertemplate='%{text}<br>WR: %{x:.3f}<extra></extra>'
         ))
     fig.add_trace(
         go.Scatter(
