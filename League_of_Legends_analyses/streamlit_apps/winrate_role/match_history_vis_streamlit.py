@@ -529,7 +529,7 @@ with bigtab2:
 
         with right:
             threat_options = [f'⚠️ {opp}' for opp in threat_opps]
-            other_options = [nam for nam in role_champs if nam not in threat_opps + [selected_champ]]
+            other_options = [nam for nam in full_df.loc[full_df['champ']==selected_champ,'opp'] if nam not in threat_opps + [selected_champ]]
             all_options = threat_options + other_options
             
             raw_selection = st.multiselect(
