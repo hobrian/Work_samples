@@ -527,19 +527,19 @@ with bigtab2:
     
         # --- compute coverage state ---
         chosen = st.session_state['chosen_champions']
-        coverage = get_coverage(chosen, threat_opps)
+        threat_pool = st.session_state.get('threat_pool', threat_opps)
+        coverage = get_coverage(chosen, threat_pool)
         uncovered = []
         uncovered_totals = []
-        for opp in threat_opps:
+        for opp in threat_pool:
             if coverage[opp]['best_wr'] <= threshold:
                 uncovered.append(opp)
                 uncovered_totals.append(threats.loc[threats['opp'] == opp, 'total'].values[0])
         
-        total_threat_weight = threats['total'].sum()
-
+        total_threat_weight = threats[threats['opp'].isin(threat_pool)]['total'].sum()
         covered_weight = sum(
             threats.loc[threats['opp'] == opp, 'total'].values[0]
-            for opp in threat_opps
+            for opp in threat_pool
             if coverage[opp]['best_wr'] > threshold
         )
         weighted_pct = covered_weight / total_threat_weight if total_threat_weight > 0 else 0
@@ -614,12 +614,15 @@ with bigtab2:
                 st.info('Coverage set is full.') 
            
         with right:
-            if len(threats) == 0:
-                st.info(f'{selected_champ} has no significant unfavorable matchups.')
+            threat_pool = st.session_state.get('threat_pool', threat_opps)
+            pool_threats = threats[threats['opp'].isin(threat_pool)]
+            
+            if len(pool_threats) == 0:
+                st.info(f'{selected_champ} has no threats in pool.')
             else:
                 cols_per_row = 5
-                rows = [threats.iloc[i:i+cols_per_row] 
-                        for i in range(0, len(threats), cols_per_row)]
+                rows = [pool_threats.iloc[i:i+cols_per_row] 
+                        for i in range(0, len(pool_threats), cols_per_row)]
     
                 for row_df in rows:
                     cols = st.columns(cols_per_row)
@@ -639,8 +642,9 @@ with bigtab2:
                             with x_col:
                                 st.markdown('<div style="padding-top: 10px;"></div>', unsafe_allow_html=True)
                                 if st.button('❌', key=f'remove_{opp}_{selected_champ}'):
-                                    st.session_state[f'threat_pool'].remove(opp)
+                                    st.session_state['threat_pool'].remove(opp)
                                     st.rerun()
+                            # these must be outside icon_col/x_col but inside col
                             bar_color = '#2951f2' if is_covered else '#e32020'
                             st.markdown(progress_bar(display_wr, color=bar_color), unsafe_allow_html=True)
                             if is_covered and cov['best_champ']:
